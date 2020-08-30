@@ -7,6 +7,6 @@ const usuariosRoutes = [
     component: React.lazy(() => import("./Usuarios.jsx")),
     auth: authRoles.admin
   }
-];
+]; 
 
 export default usuariosRoutes;
