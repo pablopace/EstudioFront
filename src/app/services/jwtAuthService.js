@@ -2,6 +2,8 @@ import axios from "axios";
 import localStorageService from "./localStorageService";
 import { auth } from "firebase";
 
+const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT
+
 class JwtAuthService {
 
 
@@ -15,7 +17,7 @@ class JwtAuthService {
    // User should have role property
    // You can define roles in app/auth/authRoles.js
    loginWithEmailAndPassword = (email, password) => {
-      return axios.post("http://localhost:4000/api/user/login", {
+      return axios.post( BACKEND +"/api/user/login", {
          "user": email,
          "pass": password
       })
@@ -45,8 +47,7 @@ class JwtAuthService {
    // You need to send http requst with existing token to your server to check token is valid
    // This method is being used when user logged in & app is reloaded
    loginWithToken = () => {
-
-      return axios.post("http://localhost:4000/api/pablo/token", {
+         return axios.post( BACKEND +"/api/pablo/token", {
          token: localStorage.getItem("jwt_token")
       })
          .then(response => {
