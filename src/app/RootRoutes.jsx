@@ -13,6 +13,7 @@ import mapRoutes from "./views/map/MapRoutes";
 
 
 import usuariosRoutes from "./Components/Usuarios/UsuariosRoutes";
+import profileRoutes from "./Components/Profile/ProfileRoutes";
 
 const redirectRoute = [
   {
@@ -38,6 +39,7 @@ const routes = [
   ...mapRoutes,
 
   ...usuariosRoutes,
+  ...profileRoutes,
 
   //estos tienen que ir al ultimo 
   ...redirectRoute,

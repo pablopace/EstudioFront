@@ -35,10 +35,6 @@ class SimpleTableUsuarios extends Component {
           usuarios: response.data.data,
           loading: false
         })
-        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'success',})
-        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'error',})
-        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'warning',})
-        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'info',})
       })
       .catch(error => {
         console.log(error);

@@ -16,6 +16,7 @@ import Brand from "../SharedCompoents/Brand";
 import SidenavTheme from "../MatxTheme/SidenavTheme/SidenavTheme";
 import { isMdScreen } from "utils";
 import { merge } from "lodash";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({});
 
@@ -86,6 +87,8 @@ class Layout1Sidenav extends Component {
     this.props.logoutUser();
   };
 
+
+
   renderLogoSwitch = () => (
     // Open Brand component file to replace logo and text
     <Brand>
@@ -113,7 +116,7 @@ class Layout1Sidenav extends Component {
             {user.displayName}
           </span>
           <div className="user__menu">
-            <MatxMenu
+            {/* { <MatxMenu
               menuButton={
                 <Tooltip title="Settings">
                   <IconButtonWhite
@@ -134,12 +137,14 @@ class Layout1Sidenav extends Component {
                 <Icon> settings </Icon>
                 <span className="pl-4"> Account Setting </span>
               </MenuItem>
-            </MatxMenu>
+            </MatxMenu>} */}
 
-            <Tooltip title="Profile">
-              <IconButtonWhite aria-label="Delete" className="" size="small">
-                <IconSmall>person</IconSmall>
-              </IconButtonWhite>
+            <Tooltip title="Perfil">
+              <Link to="/profile"  >
+                <IconButtonWhite aria-label="Delete" className="" size="small" to="/profile" >
+                  <IconSmall>person</IconSmall>
+                </IconButtonWhite>
+              </Link>
             </Tooltip>
             <Tooltip title="Sign out">
               <IconButtonWhite
