@@ -13,6 +13,7 @@ import { Store } from "./redux/Store";
 import Auth from "./auth/Auth";
 import MatxLayout from "./MatxLayout/MatxLayoutSFC";
 import AuthGuard from "./auth/AuthGuard";
+import { SnackbarProvider } from 'notistack'
 
 const App = () => {
   return (
@@ -22,7 +23,9 @@ const App = () => {
           <Auth>
             <Router history={history}>
               <AuthGuard>
-                <MatxLayout />
+                <SnackbarProvider maxSnack={4} >
+                  <MatxLayout />
+                </SnackbarProvider>
               </AuthGuard>
             </Router>
           </Auth>

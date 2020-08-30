@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core"
 import Loader from "../Utilidades/Loader"
 import axios from "axios"
-import {withSnackbar} from "notistack"
+import { withSnackbar } from 'notistack';
 
 
 
@@ -35,7 +35,10 @@ class SimpleTableUsuarios extends Component {
           usuarios: response.data.data,
           loading: false
         })
-        this.props.enqueueSnackbar('Successfully fetched data')
+        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'success',})
+        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'error',})
+        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'warning',})
+        this.props.enqueueSnackbar('Successfully fetched the data.', {variant: 'info',})
       })
       .catch(error => {
         console.log(error);
@@ -86,4 +89,4 @@ class SimpleTableUsuarios extends Component {
 }
 
 
-export default SimpleTableUsuarios;
+export default withSnackbar(SimpleTableUsuarios);
