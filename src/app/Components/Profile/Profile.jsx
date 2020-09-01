@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Breadcrumb } from "matx";
+import { Breadcrumb, SimpleCard } from "matx";
 import ProfileForm from "./ProfileForm"
-import { Card } from "@material-ui/core";
+import CambiarPass from "./CambiarPass"
+
+
 
 class Profile extends Component {
+
   render() {
     return (
       <div className="m-sm-30">
@@ -15,7 +18,9 @@ class Profile extends Component {
             ]}
           />
         </div>
-        <Card className="px-6 pt-2 pb-4"><ProfileForm /></Card>
+        <SimpleCard title="Perfil" ><ProfileForm /></SimpleCard>
+        <div className="py-3" />
+        <SimpleCard title="Cambiar Contraseña" ><CambiarPass /></SimpleCard>
       </div>
     );
   }

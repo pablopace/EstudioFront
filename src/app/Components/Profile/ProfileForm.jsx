@@ -1,18 +1,7 @@
 import React, { Component } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import {
-  Button,
-  Icon,
-  Grid,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  Checkbox
-} from "@material-ui/core";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from "@material-ui/pickers";
+import { Button,  Icon,  Grid,  Radio,  RadioGroup,  FormControlLabel,  Checkbox} from "@material-ui/core";
+import { MuiPickersUtilsProvider,  KeyboardDatePicker} from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 
@@ -22,12 +11,7 @@ class ProfileForm extends Component {
     firstName: "",
     email: "",
     date: new Date(),
-    creditCard: "",
-    mobile: "",
-    password: "",
-    confirmPassword: "",
-    gender: "",
-    agreement: ""
+    mobile: ""
   };
 
   componentDidMount() {
@@ -65,11 +49,7 @@ class ProfileForm extends Component {
     let {
       username,
       firstName,
-      creditCard,
       mobile,
-      password,
-      confirmPassword,
-      gender,
       date,
       email
     } = this.state;
@@ -94,6 +74,16 @@ class ProfileForm extends Component {
                   "minStringLength: 4",
                   "maxStringLength: 9"
                 ]}
+                errorMessages={["this field is required"]}
+              />
+              <TextValidator
+                className="mb-4 w-full"
+                label="First Name"
+                onChange={this.handleChange}
+                type="text"
+                name="firstName"
+                value={firstName}
+                validators={["required"]}
                 errorMessages={["this field is required"]}
               />
               <TextValidator
@@ -133,20 +123,7 @@ class ProfileForm extends Component {
                   }}
                 />
               </MuiPickersUtilsProvider>
-              <TextValidator
-                className="mb-8 w-full"
-                label="Credit Card"
-                onChange={this.handleChange}
-                type="number"
-                name="creditCard"
-                value={creditCard}
-                validators={[
-                  "required",
-                  "minStringLength:16",
-                  "maxStringLength: 16"
-                ]}
-                errorMessages={["this field is required"]}
-              />
+
             </Grid>
 
             <Grid item lg={6} md={6} sm={12} xs={12}>
@@ -160,64 +137,12 @@ class ProfileForm extends Component {
                 validators={["required"]}
                 errorMessages={["this field is required"]}
               />
-              <TextValidator
-                className="mb-4 w-full"
-                label="Password"
-                onChange={this.handleChange}
-                name="password"
-                type="password"
-                value={password}
-                validators={["required"]}
-                errorMessages={["this field is required"]}
-              />
-              <TextValidator
-                className="mb-4 w-full"
-                label="Confirm Password"
-                onChange={this.handleChange}
-                name="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                validators={["required", "isPasswordMatch"]}
-                errorMessages={[
-                  "this field is required",
-                  "password didn't match"
-                ]}
-              />
-              <RadioGroup
-                className="mb-4"
-                value={gender}
-                name="gender"
-                onChange={this.handleChange}
-                row
-              >
-                <FormControlLabel
-                  value="Male"
-                  control={<Radio color="secondary" />}
-                  label="Male"
-                  labelPlacement="end"
-                />
-                <FormControlLabel
-                  value="Female"
-                  control={<Radio color="secondary" />}
-                  label="Female"
-                  labelPlacement="end"
-                />
-                <FormControlLabel
-                  value="Others"
-                  control={<Radio color="secondary" />}
-                  label="Others"
-                  labelPlacement="end"
-                />
-              </RadioGroup>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="I have read and agree to the terms of service."
-              />
+
             </Grid>
           </Grid>
           <Button color="primary" variant="contained" type="submit">
             <Icon>send</Icon>
-            <span className="pl-2 capitalize">Submit</span>
+            <span className="pl-2 capitalize">Enviar</span>
           </Button>
         </ValidatorForm>
       </div>
