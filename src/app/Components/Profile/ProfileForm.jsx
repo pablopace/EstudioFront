@@ -1,18 +1,29 @@
 import React, { Component } from "react";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
-import { Button,  Icon,  Grid,  Radio,  RadioGroup,  FormControlLabel,  Checkbox} from "@material-ui/core";
-import { MuiPickersUtilsProvider,  KeyboardDatePicker} from "@material-ui/pickers";
+import { Button, Icon, Grid, Radio, RadioGroup, FormControlLabel, Checkbox } from "@material-ui/core";
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import { Label } from "recharts";
+import axios from "axios"
+import { withSnackbar } from 'notistack';
+
+const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT
 
 class ProfileForm extends Component {
-  state = {
-    username: "",
-    firstName: "",
-    email: "",
-    date: new Date(),
-    mobile: ""
-  };
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      username: "",
+      firstName: "",
+      surName: "",
+      email: "",
+      date: new Date(),
+      mobile: ""
+    }
+  }
+
 
   componentDidMount() {
     // custom rule will have name 'isPasswordMatch'
@@ -22,11 +33,34 @@ class ProfileForm extends Component {
       }
       return true;
     });
+
+
+    axios.get(BACKEND + "/api/user/active")
+      .then(response => {
+        console.log("user/active ", response)
+        if (response.status >= 200 && response.status <= 299) {
+          return response.data.data.user;
+        } else {
+          throw Error(response.statusText);
+        }
+      })
+      .then(user => {
+        console.log("data.user.user", user)
+        this.setState({
+          username: user.user,
+          firstName: user.name,
+          surName: user.surname
+        })
+
+      })
+
+
+
+
   }
 
   componentWillUnmount() {
-    // remove rule when it is not needed
-    ValidatorForm.removeValidationRule("isPasswordMatch");
+   
   }
 
   handleSubmit = event => {
@@ -49,6 +83,7 @@ class ProfileForm extends Component {
     let {
       username,
       firstName,
+      surName,
       mobile,
       date,
       email
@@ -63,22 +98,16 @@ class ProfileForm extends Component {
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <TextValidator
+                disabled="true"
                 className="mb-4 w-full"
-                label="Username (Min length 4, Max length 9)"
-                onChange={this.handleChange}
+                label="Username"
                 type="text"
                 name="username"
                 value={username}
-                validators={[
-                  "required",
-                  "minStringLength: 4",
-                  "maxStringLength: 9"
-                ]}
-                errorMessages={["this field is required"]}
               />
               <TextValidator
                 className="mb-4 w-full"
-                label="First Name"
+                label="Nombre"
                 onChange={this.handleChange}
                 type="text"
                 name="firstName"
@@ -88,11 +117,11 @@ class ProfileForm extends Component {
               />
               <TextValidator
                 className="mb-4 w-full"
-                label="First Name"
+                label="Apellido"
                 onChange={this.handleChange}
                 type="text"
-                name="firstName"
-                value={firstName}
+                name="surName"
+                value={surName}
                 validators={["required"]}
                 errorMessages={["this field is required"]}
               />
