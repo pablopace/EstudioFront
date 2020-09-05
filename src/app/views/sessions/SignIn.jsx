@@ -62,14 +62,14 @@ class SignIn extends Component {
                     <TextValidator
                       className="mb-6 w-full"
                       variant="outlined"
-                      label="Email"
+                      label="Usuario"
                       onChange={this.handleChange}
                       type="text"
                       name="email"
                       value={email}
                       validators={["required"]}
                       errorMessages={[
-                        "this field is required"
+                        "Este campo es requerido"
                       ]}
                     />
                     <TextValidator
@@ -81,7 +81,7 @@ class SignIn extends Component {
                       type="password"
                       value={password}
                       validators={["required"]}
-                      errorMessages={["this field is required"]}
+                      errorMessages={["Este campo es requerido"]}
                     />
 
                     <div className="flex flex-wrap items-center mb-4">
