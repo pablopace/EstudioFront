@@ -10,6 +10,11 @@ export const navigations = [
     icon: "group"
   },
   {
+    name: "Clientes",
+    path: "/clientes",
+    icon: "perm_contact_calendar"
+  },
+  {
     name: "Todos los componentes",
     icon: "toys",
     children: [
