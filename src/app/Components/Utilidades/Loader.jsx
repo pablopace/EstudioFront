@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { CircularProgress } from "@material-ui/core";
+import { LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
@@ -7,13 +8,13 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1
     },
     progress: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     }
 }));
 
 const Loader = () => {
     return (
-        <CircularProgress className={useStyles().progress} />
+        <LinearProgress className={useStyles().progress} />
     );
 }
 
