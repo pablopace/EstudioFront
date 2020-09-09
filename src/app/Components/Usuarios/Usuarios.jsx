@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import SimpleTableUsuarios from "./SimpleTableUsuarios";
 import { Breadcrumb, SimpleCard } from "matx";
+import TablaUsuarios from "./TablaUsuarios";
+
 
 
 
@@ -8,9 +9,19 @@ class Usuarios extends Component {
 
     render() {
         return (
-            <SimpleCard title="Usuarios">
-                <SimpleTableUsuarios />
-            </SimpleCard>
+            <div className="m-sm-30">
+                <div className="mb-sm-30">
+                    <Breadcrumb
+                        routeSegments={[
+                            { name: "Usuarios", path: "/usuarios" },
+                        ]}
+                    />
+                </div>
+                <SimpleCard>
+                    <TablaUsuarios />
+                </SimpleCard>
+
+            </div>
         );
     }
 

@@ -28,7 +28,7 @@ class SimpleTableUsuarios extends Component {
 
   componentDidMount() {
 
-    axios.get("https://reqres.in/api/users?delay=3")
+    axios.get("https://reqres.in/api/users?page=2")
       .then(response => {
         console.log(response)
         this.setState({
@@ -64,7 +64,7 @@ class SimpleTableUsuarios extends Component {
             </TableHead>
             <TableBody>
               {usuarios.map((usuario, index) => (
-                <TableRow key={index}>
+                <TableRow key={index} style >
                   <TableCell className="px-0 capitalize" align="left">{usuario.id}</TableCell>
                   <TableCell className="px-0 capitalize" align="left">{usuario.first_name}</TableCell>
                   <TableCell className="px-0 capitalize" align="left">{usuario.last_name}</TableCell>
