@@ -62,6 +62,35 @@ class JwtAuthService {
 
    };
 
+   resetPasswordRequest = (user) => {
+      return axios.post(BACKEND + "/api/user/reset/request", {
+         "user": user
+      })
+         .then(response => {
+            console.log(response)
+            if (response.status >= 200 && response.status <= 299) {
+               return response.data.data
+            } else {
+               throw Error(response.statusText);
+            }
+         })
+   }
+
+   resetPassword = (pass_reset_id, pass) => {
+      return axios.post(BACKEND + "/api/user/reset", {
+         "pass_reset_id": pass_reset_id,
+         "pass": pass
+      })
+         .then(response => {
+            console.log(response)
+            if (response.status >= 200 && response.status <= 299) {
+               return response.data.data
+            } else {
+               throw Error(response.statusText);
+            }
+         })
+   }
+
    logout = () => {
       this.setSession(null);
       this.removeUser();

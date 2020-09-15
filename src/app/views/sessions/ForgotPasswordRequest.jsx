@@ -5,24 +5,26 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
-import { resetPassword } from "../../redux/actions/LoginActions";
+import { resetPasswordRequest } from "../../redux/actions/LoginActions";
 
-class ForgotPassword extends Component {
+class ForgotPasswordRequest extends Component {
   state = {
-    reset_pass_id: "",
-    pass: ""
+    user: ""
   };
+
   handleChange = event => {
     event.persist();
     this.setState({
       [event.target.name]: event.target.value
     });
   };
+
   handleFormSubmit = event => {
-    this.props.resetPassword({ ...this.state });
+    this.props.resetPasswordRequest({ ...this.state });
   };
+
   render() {
-    let { reset_pass_id, pass } = this.state;
+    let { user } = this.state;
 
     return (
       <div className="signup flex justify-center w-full h-full-screen">
@@ -40,32 +42,21 @@ class ForgotPassword extends Component {
                     <TextValidator
                       className="mb-6 w-full"
                       variant="outlined"
-                      label="Id"
+                      label="Usuario"
                       onChange={this.handleChange}
                       type="text"
-                      name="reset_pass_id"
-                      value={reset_pass_id}
+                      name="user"
+                      value={user}
                       validators={["required"]}
                       autoComplete="off"
                       errorMessages={[
                         "this field is required"
                       ]}
                     />
-                    <TextValidator
-                      className="mb-3 w-full"
-                      label="Password"
-                      variant="outlined"
-                      onChange={this.handleChange}
-                      name="pass"
-                      type="password"
-                      value={pass}
-                      validators={["required"]}
-                      errorMessages={[
-                        "this field is required"
-                      ]}
-                    />
                     <div className="flex items-center">
                       <Button variant="contained" color="primary" type="submit"
+                      //onClick={async () => {
+                      //    this.props.history.push("/session/forgot-password")}}
                       >
                         Reset Password
                       </Button>
@@ -91,9 +82,9 @@ class ForgotPassword extends Component {
 }
 
 const mapStateToProps = state => ({
-  resetPassword: PropTypes.func.isRequired,
+  resetPasswordRequest: PropTypes.func.isRequired,
   login: state.login
 });
 export default withRouter(
-  connect(mapStateToProps, { resetPassword })(ForgotPassword)
+  connect(mapStateToProps, { resetPasswordRequest })(ForgotPasswordRequest)
 );

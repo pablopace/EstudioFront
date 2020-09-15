@@ -7,6 +7,8 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
 export const RESET_PASSWORD = "RESET_PASSWORD";
+export const RESET_PASSWORD_REQUEST = "RESET_PASSWORD_REQUEST";
+export const RESET_PASSWORD_ERROR = "RESET_PASSWORD_ERROR";
 
 export function loginWithEmailAndPassword({ email, password }) {
   return dispatch => {
@@ -36,12 +38,60 @@ export function loginWithEmailAndPassword({ email, password }) {
   };
 }
 
-export function resetPassword({ email }) {
+export function resetPasswordRequest({ user }) {
   return dispatch => {
     dispatch({
-      payload: email,
-      type: RESET_PASSWORD
+      type: LOGIN_LOADING
     });
+
+    jwtAuthService
+      .resetPasswordRequest(user)
+      .then(reset => {
+        //dispatch(setUserData(reset));
+
+        history.push({
+          pathname: "/session/forgot-password"
+        });
+
+        return dispatch({
+          type: RESET_PASSWORD_REQUEST
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: RESET_PASSWORD_ERROR,
+          payload: error
+        });
+      });
+  };
+}
+
+
+export function resetPassword({ reset_pass_id, pass }) {
+  return dispatch => {
+    dispatch({
+      type: LOGIN_LOADING
+    });
+
+    jwtAuthService
+      .resetPassword(reset_pass_id, pass)
+      .then(reset => {
+        //dispatch(setUserData(reset));
+
+        history.push({
+          pathname: "/session/signin"
+        });
+
+        return dispatch({
+          type: RESET_PASSWORD
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: RESET_PASSWORD_ERROR,
+          payload: error
+        });
+      });
   };
 }
 

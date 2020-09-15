@@ -112,6 +112,11 @@ export const navigations = [
             path: "/session/signup"
           },
           {
+            name: "Forgot password request",
+            iconText: "FP",
+            path: "/session/forgot-password-request"
+          },
+          {
             name: "Forgot password",
             iconText: "FP",
             path: "/session/forgot-password"

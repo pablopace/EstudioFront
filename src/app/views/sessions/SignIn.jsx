@@ -36,11 +36,13 @@ class SignIn extends Component {
   };
   handleChange = event => {
     event.persist();
+    console.log({ ...this.state });
     this.setState({
       [event.target.name]: event.target.value
     });
   };
   handleFormSubmit = event => {
+    console.log({ ...this.state });
     this.props.loginWithEmailAndPassword({ ...this.state });
   };
   render() {
@@ -68,6 +70,7 @@ class SignIn extends Component {
                       name="email"
                       value={email}
                       validators={["required"]}
+                      autoComplete="off"
                       errorMessages={[
                         "Este campo es requerido"
                       ]}
@@ -105,7 +108,7 @@ class SignIn extends Component {
                     <Button
                       className="text-primary"
                       onClick={() =>
-                        this.props.history.push("/session/forgot-password")
+                        this.props.history.push("/session/forgot-password-request")
                       }
                     >
                       Forgot password?
