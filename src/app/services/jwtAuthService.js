@@ -47,7 +47,7 @@ class JwtAuthService {
          .then(response => {
             console.log("user/active ", response)
             if (response.status >= 200 && response.status <= 299) {
-               return response.data.data.user.user;
+               return response.data.data;
             } else {
                throw Error(response.statusText);
             }
@@ -56,7 +56,7 @@ class JwtAuthService {
             console.log("data.user.user",data)
             // Token is valid
             this.setSession(token);
-            this.setUser(data);
+            this.setUser(data.user);
             return data;
          })
 
@@ -121,6 +121,7 @@ class JwtAuthService {
 
       auth_user.displayName = user.name + " " + user.surname;
       auth_user.token = user.access_token;
+      auth_user.userId = user.user;
 
       localStorageService.setItem("auth_user", auth_user);
    }

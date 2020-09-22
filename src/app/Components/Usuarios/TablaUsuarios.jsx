@@ -7,15 +7,17 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Loader from "../Utilidades/Loader"
+import localStorageService from "../../services/localStorageService";
 import axios from "axios"
 import { withSnackbar } from 'notistack';
 
+const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
 class TablaUsuarios extends Component {
 
     constructor(props) {
         super(props)
-
+        
         this.state = {
             loading: true,
             usuarios: []
@@ -23,12 +25,17 @@ class TablaUsuarios extends Component {
     }
 
     componentDidMount() {
+        const token = localStorage.getItem("jwt_token")
+        if (token)
+            axios.defaults.headers.common["Authorization"] = token;
 
-        axios.get("https://reqres.in/api/users?page=2")
+        let auth_user = localStorageService.getItem("auth_user");
+        
+        axios.get(BACKEND + `/api/user/${auth_user.userId}`)
             .then(response => {
                 console.log(response)
                 this.setState({
-                    usuarios: response.data.data,
+                    usuarios: response.data.data.user,
                     loading: false
                 })
             })
@@ -50,10 +57,11 @@ class TablaUsuarios extends Component {
                 <MUIDataTable
                     title={"Usuarios"}
                     data={usuarios}
-                    columns={[ {
+                    columns={[ 
+                       /*{
                         name: "id",
                         label: "Id",
-                       },
+                       },*/
                        {
                         name: "first_name",
                         label: "Nombre",
@@ -66,10 +74,10 @@ class TablaUsuarios extends Component {
                         name: "email",
                         label: "Email",
                        },
-                       {
+                       /*{
                         name: "email",
                         label: "Rol",
-                       },                  
+                       },*/                  
                         {
                             name: "id", // ponerle algun nombre de las otras columnas
                             label: "",

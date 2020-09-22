@@ -34,17 +34,18 @@ class SignIn extends Component {
     email: "",
     password: ""
   };
+
   handleChange = event => {
     event.persist();
-    console.log({ ...this.state });
     this.setState({
       [event.target.name]: event.target.value
     });
   };
+  
   handleFormSubmit = event => {
-    console.log({ ...this.state });
     this.props.loginWithEmailAndPassword({ ...this.state });
   };
+  
   render() {
     let { email, password } = this.state;
     let { classes } = this.props;

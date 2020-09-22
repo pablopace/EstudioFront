@@ -10,7 +10,7 @@ import { MatxMenu, MatxSearchBox } from "matx";
 import { isMdScreen, classList } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
-import ShoppingCart from "../SharedCompoents/ShoppingCart";
+//import ShoppingCart from "../SharedCompoents/ShoppingCart";
 
 const styles = theme => ({
   topbar: {
@@ -99,8 +99,7 @@ class Layout1Topbar extends Component {
 
               <NotificationBar />
 
-              <ShoppingCart></ShoppingCart>
-
+              
               <MatxMenu
                 menuButton={
                   <img

@@ -5,7 +5,7 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { classList } from "utils";
 import MatxCustomizer from "../MatxCustomizer/MatxCustomizer";
-import ShoppingCart from "../ShoppingCart";
+//import ShoppingCart from "../ShoppingCart";
 const width = "50px";
 
 const styles = theme => ({
@@ -59,8 +59,7 @@ class SecondarySidebarContent extends Component {
 
         <MatxCustomizer />
 
-        <ShoppingCart />
-
+        
         <Link to="/chat">
           <IconButton size="small" aria-label="delete" className="my-3">
             <Icon>comments</Icon>

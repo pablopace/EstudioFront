@@ -7,9 +7,11 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Loader from "../Utilidades/Loader"
+import localStorageService from "../../services/localStorageService";
 import axios from "axios"
 import { withSnackbar } from 'notistack';
 
+const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
 class TablaClientes extends Component {
 
@@ -24,11 +26,13 @@ class TablaClientes extends Component {
 
     componentDidMount() {
 
-        axios.get("https://reqres.in/api/users?page=2")
+        let auth_user = localStorageService.getItem("auth_user");
+        
+        axios.get(BACKEND + `/api/user/${auth_user.userId}`)
             .then(response => {
                 console.log(response)
                 this.setState({
-                    clientes: response.data.data,
+                    clientes: response.data.data.client,
                     loading: false
                 })
             })
@@ -50,10 +54,11 @@ class TablaClientes extends Component {
                 <MUIDataTable
                     title={"Clientes"}
                     data={clientes}
-                    columns={[ {
+                    columns={[ 
+                       /*{
                         name: "client_id",
                         label: "Id",
-                       },
+                       },*/
                        {
                         name: "first_name",
                         label: "Nombre",
