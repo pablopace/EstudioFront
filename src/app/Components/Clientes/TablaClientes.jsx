@@ -26,11 +26,12 @@ class TablaClientes extends Component {
 
     componentDidMount() {
 
-        let auth_user = localStorageService.getItem("auth_user");
+        let auth_user = window.localStorage.getItem("auth_user");
+        auth_user = JSON.parse(auth_user);
         
         axios.get(BACKEND + `/api/user/${auth_user.userId}`)
             .then(response => {
-                console.log(response)
+                
                 this.setState({
                     clientes: response.data.data.client,
                     loading: false
@@ -39,7 +40,6 @@ class TablaClientes extends Component {
             .catch(error => {
                 console.log(error);
             })
-
     }
 
     render() {

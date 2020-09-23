@@ -7,7 +7,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Loader from "../Utilidades/Loader"
-import localStorageService from "../../services/localStorageService";
 import axios from "axios"
 import { withSnackbar } from 'notistack';
 
@@ -25,15 +24,13 @@ class TablaUsuarios extends Component {
     }
 
     componentDidMount() {
-        const token = localStorage.getItem("jwt_token")
-        if (token)
-            axios.defaults.headers.common["Authorization"] = token;
-
-        let auth_user = localStorageService.getItem("auth_user");
+        
+        let auth_user = window.localStorage.getItem("auth_user");
+        auth_user = JSON.parse(auth_user);
         
         axios.get(BACKEND + `/api/user/${auth_user.userId}`)
             .then(response => {
-                console.log(response)
+                
                 this.setState({
                     usuarios: response.data.data.user,
                     loading: false
