@@ -108,7 +108,7 @@ class TablaClientes extends Component {
                             console.log(rowData);
                             console.log(rowMeta);
                         },
-                        pagination: false,
+                        pagination: true,
                         customToolbar: () => {
                             return (
                                 <React.Fragment>
