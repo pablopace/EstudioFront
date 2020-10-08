@@ -26,14 +26,15 @@ class TablaUsuarios extends Component {
 
     componentDidMount() {
 
-        let auth_user = window.localStorage.getItem("auth_user");
-        auth_user = JSON.parse(auth_user);
+        //let auth_user = window.localStorage.getItem("auth_user");
+        //auth_user = JSON.parse(auth_user);
 
-        axios.get(BACKEND + `/api/user?user=${auth_user.userId}`)
+        //axios.get(BACKEND + `/api/user?user=${auth_user.userId}`)
+        axios.get(BACKEND + `/api/user`)
             .then(response => {
 
                 this.setState({
-                    usuarios: response.data.data.user,
+                    usuarios: response.data.data,
                     loading: false
                 })
             })
@@ -56,10 +57,10 @@ class TablaUsuarios extends Component {
                         title={"Usuarios"}
                         data={usuarios}
                         columns={[
-                            /*{
-                             name: "id",
-                             label: "Id",
-                            },*/
+                            {
+                                name: "user",
+                                label: "Usuario",
+                            },
                             {
                                 name: "first_name",
                                 label: "Nombre",
