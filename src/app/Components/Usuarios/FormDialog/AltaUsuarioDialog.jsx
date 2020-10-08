@@ -25,20 +25,29 @@ export default function FormDialog() {
   }
 
   function handleSaveAndClose() {
+    let user = document.getElementById("user");
+    let pass = document.getElementById("pass");
     let first_name = document.getElementById("first_name");
     let last_name = document.getElementById("last_name");
-    let address = document.getElementById("address");
-    let zip_code = document.getElementById("zip_code");
+    let email = document.getElementById("email");
+    let role_id = document.getElementById("role_id");
 
-    /*axios.post(BACKEND + `/api/user?user=${auth_user.userId}`)
+    axios.put(BACKEND + `/api/user`, {
+      "user":user,
+      "pass":pass,
+      "first_name":first_name,
+      "last_name":last_name,
+      "email":email,
+      "role_id":role_id
+    })
       .then(response => {
-
+        console.log("OK");
         setOpen(false);
           
       })
       .catch(error => {
           console.log(error);
-      })*/  
+      })  
   }
 
   return (
