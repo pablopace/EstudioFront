@@ -55,9 +55,11 @@
     "swiper": "^4.5.0",
     "victory": "^32.3.3"
   },
+  "proxy":"http://localhost:4000",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "build2": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "ghp": "react-scripts build && gh-pages -d build"

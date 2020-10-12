@@ -13,7 +13,7 @@ import axios from "axios"
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-export default function FormDialog() {
+export default function FormDialog({refreshTableUser}) {
   const [open, setOpen] = React.useState(false);
 
   function handleClickOpen() {
@@ -25,25 +25,34 @@ export default function FormDialog() {
   }
 
   function handleSaveAndClose() {
-    let user = document.getElementById("user");
-    let pass = document.getElementById("pass");
-    let first_name = document.getElementById("first_name");
-    let last_name = document.getElementById("last_name");
-    let email = document.getElementById("email");
-    let role_id = document.getElementById("role_id");
+    let user = document.getElementById("user").value;
+    let pass = document.getElementById("pass").value;
+    let first_name = document.getElementById("first_name").value;
+    let last_name = document.getElementById("last_name").value;
+    let email = document.getElementById("email").value;
+    let role_id = document.getElementById("role_id").value;
+    console.log("Listo pata llamar al servicio");
 
-    axios.put(BACKEND + `/api/user`, {
+    var data = {
       "user":user,
       "pass":pass,
       "first_name":first_name,
       "last_name":last_name,
       "email":email,
       "role_id":role_id
-    })
+    };
+
+    var config = {
+      method: 'put',
+      url: BACKEND + `/api/user`,
+      data : data
+    };
+
+    axios(config)
       .then(response => {
         console.log("OK");
         setOpen(false);
-          
+        refreshTableUser()
       })
       .catch(error => {
           console.log(error);

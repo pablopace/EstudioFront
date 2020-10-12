@@ -43,6 +43,20 @@ class TablaUsuarios extends Component {
             })
     }
 
+    refreshTableUser = () => {
+        axios.get(BACKEND + `/api/user`)
+            .then(response => {
+
+                this.setState({
+                    usuarios: response.data.data,
+                    loading: false
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     render() {
         const { loading, usuarios } = this.state
 
@@ -114,7 +128,7 @@ class TablaUsuarios extends Component {
                             customToolbar: () => {
                                 return (
                                     <React.Fragment>
-                                        <AltaUsuarioDialog />
+                                        <AltaUsuarioDialog refreshTableUser={this.refreshTableUser.bind(this)} />
                                     </React.Fragment>
                                 );
                             }
