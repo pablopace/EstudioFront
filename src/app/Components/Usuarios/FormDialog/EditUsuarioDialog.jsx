@@ -20,18 +20,32 @@ export default function FormDialog(props) {
 
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].user);
-  const [pass, setPass] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].pass);
-  const [nombre, setNombre] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].first_name);
-  const [apellido, setApellido] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].last_name);
-  const [email, setEmail] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].email);
-  const [rol, setRol] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].user);
-  const [user_id, setUserId] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].user_id);
+  const [pass, setPass] = React.useState("");
+  const [nombre, setNombre] = React.useState("");
+  const [apellido, setApellido] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [rol, setRol] = React.useState("");
+  const [rolDesc, setRolDesc] = React.useState("");
+  const [user_id, setUserId] = React.useState("");
 
   function handleClickOpen() {
-    setOpen(true);
-    console.log(props.tablaMeta );
-    console.log(props.tablaMeta.tableData[props.tablaMeta.rowIndex].user );
 
+    axios.get(BACKEND + `/api/user?user=` + user)
+      .then(response => {
+        console.log(response);
+
+        setNombre(response.data.data[0].first_name)
+        setApellido(response.data.data[0].last_name)
+        setEmail(response.data.data[0].email)
+        setRol(response.data.data[0].role_id)
+        setRolDesc(response.data.data[0].role_desc)
+
+        setOpen(true);
+
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   function handleClose() {
@@ -46,7 +60,7 @@ export default function FormDialog(props) {
       "last_name": apellido,
       "email": email,
       "role_id": rol
-    })   
+    })
       .then(response => {
         console.log("OK");
         setOpen(false);
@@ -56,8 +70,8 @@ export default function FormDialog(props) {
       })
   }
 
-  function borrarUsuario(){
-    axios.delete(BACKEND + `/api/user/`,{
+  function borrarUsuario() {
+    axios.delete(BACKEND + `/api/user/`, {
       "user": user,
     })
       .then(response => {

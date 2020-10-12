@@ -89,10 +89,10 @@ class TablaUsuarios extends Component {
                                 name: "email",
                                 label: "Email",
                             },
-                            /*{
-                             name: "email",
-                             label: "Rol",
-                            },*/
+                            {
+                                name: "role_desc",
+                                label: "Rol",
+                            },
                             {
                                 name: "id", // ponerle algun nombre de las otras columnas
                                 label: "",
