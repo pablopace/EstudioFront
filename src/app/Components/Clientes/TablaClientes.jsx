@@ -45,19 +45,6 @@ class TablaClientes extends Component {
             })
     }
 
-    refreshTableClientes = () => {
-        axios.get(BACKEND + `/api/user`)
-            .then(response => {
-
-                this.setState({
-                    usuarios: response.data.data,
-                    loading: false
-                })
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
 
     render() {
         const { loading, clientes } = this.state
@@ -121,7 +108,7 @@ class TablaClientes extends Component {
                         customToolbar: () => {
                             return (
                                 <React.Fragment>
-                                    <AltaClientesDialog refreshTableClientes={this.refreshTableClientes.bind(this)} />
+                                    <AltaClientesDialog refreshTableClientes={this.componentDidMount.bind(this)} />
                                 </React.Fragment>
                             );
                         }
