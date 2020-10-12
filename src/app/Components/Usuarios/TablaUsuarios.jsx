@@ -10,6 +10,7 @@ import Loader from "../Utilidades/Loader"
 import axios from "axios"
 import { withSnackbar } from 'notistack';
 import AltaUsuarioDialog from './FormDialog/AltaUsuarioDialog';
+import EditUsuarioDialog from './FormDialog/EditUsuarioDialog';
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
@@ -20,7 +21,8 @@ class TablaUsuarios extends Component {
 
         this.state = {
             loading: true,
-            usuarios: []
+            usuarios: [],
+            filaSeleccionada: {}
         }
     }
 
@@ -97,18 +99,10 @@ class TablaUsuarios extends Component {
                                 options: {
                                     customBodyRender: (value, tableMeta, updateValue) => {
                                         return (
-                                            <ButtonGroup>
-                                                <Tooltip title={"Editar"}>
-                                                    <IconButton onClick={() => console.log(value, tableMeta, updateValue)}>
-                                                        <EditIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title={"Borrar"}>
-                                                    <IconButton onClick={() => alert("Delete")}>
-                                                        <DeleteIcon fontSize="small" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </ButtonGroup>
+                                            <React.Fragment>
+                                                <EditUsuarioDialog tablaMeta={tableMeta} />
+                                            </React.Fragment>
+
                                         )
                                     },
                                     filter: false,
@@ -121,8 +115,9 @@ class TablaUsuarios extends Component {
                             selectableRows: 'none',
                             print: false,
                             onRowClick: (rowData, rowMeta) => {
-                                console.log(rowData);
-                                console.log(rowMeta);
+                                this.setState({
+                                    filaSeleccionada: rowMeta
+                                })
                             },
                             pagination: true,
                             customToolbar: () => {
