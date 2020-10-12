@@ -10,13 +10,16 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import axios from "axios"
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-export default function FormDialog({refreshTableClientes}) {
-  
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
-  const [nombre, setNombre] = React.useState("");
+  const [nombre, setNombre] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].first_name);
   const [apellido, setApellido] = React.useState("");
   const [adress, setAdress] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -37,7 +40,7 @@ export default function FormDialog({refreshTableClientes}) {
   }
 
   function handleSaveAndClose() {
-    axios.put(BACKEND + `/api/client`, {
+    axios.post(BACKEND + `/api/client`, {
       // "user":user,
       // "pass":pass,
       // "first_name":nombre,
@@ -55,20 +58,37 @@ export default function FormDialog({refreshTableClientes}) {
       })  
   }
 
+  function borrarCliente(){
+    axios.delete(BACKEND + `/api/client/` + user_id)
+      .then(response => {
+        console.log("OK");
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   return (
     <div>
-      <Tooltip title={"Agregar"}>
+       <ButtonGroup>
+        <Tooltip title={"Editar"}>
           <IconButton onClick={handleClickOpen}>
-              <AddIcon />
+            <EditIcon fontSize="small" />
           </IconButton>
-      </Tooltip>
+        </Tooltip>
+        <Tooltip title={"Borrar"}>
+          <IconButton onClick={borrarCliente}>
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </ButtonGroup>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-      <DialogTitle id="form-dialog-title">Nuevo Cliente</DialogTitle>
-      <DialogContent>
+      <DialogTitle id="form-dialog-title">Editar Cliente</DialogTitle>
+        <DialogContent>
           <TextField
             autoFocus
             margin="dense"
@@ -76,6 +96,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Nombre"
             type="text"
             fullWidth
+            value={nombre}
             onChange={e => setUser(e.target.value) }
           />
           <TextField
@@ -84,6 +105,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Apellido"
             type="text"
             fullWidth
+            value={apellido}
             onChange={e => setApellido(e.target.value) }
           />
           <TextField
@@ -92,6 +114,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Dirección"
             type="text"
             fullWidth
+            value={adress}
             onChange={e => setAdress(e.target.value) }
           />
           <TextField
@@ -100,6 +123,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Código postal"
             type="text"
             fullWidth
+            value={zip_code}
             onChange={e => setZipCode(e.target.value) }
           />
           <TextField
@@ -108,6 +132,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Email Address"
             type="email"
             fullWidth
+            value={email}
             onChange={e => setEmail(e.target.value) }
           />
           <TextField
@@ -116,6 +141,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Telefono"
             type="text"
             fullWidth
+            value={telefono}
             onChange={e => setTelefono(e.target.value) }
           />
           <TextField
@@ -124,6 +150,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="CUIT"
             type="text"
             fullWidth
+            value={cuil}
             onChange={e => setCuil(e.target.value) }
           />
         </DialogContent>

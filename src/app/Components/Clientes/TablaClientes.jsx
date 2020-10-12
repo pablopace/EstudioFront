@@ -10,6 +10,8 @@ import Loader from "../Utilidades/Loader"
 import localStorageService from "../../services/localStorageService";
 import axios from "axios"
 import { withSnackbar } from 'notistack';
+import AltaClientesDialog from './FormDialog/AltaClienteDialog'
+import EditClienteDialog from './FormDialog/EditClienteDialog'
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
@@ -20,7 +22,8 @@ class TablaClientes extends Component {
 
         this.state = {
             loading: true,
-            clientes: []
+            clientes: [],
+            filaSeleccionada: {}
         }
     }
 
@@ -34,6 +37,20 @@ class TablaClientes extends Component {
                 
                 this.setState({
                     clientes: response.data.data.client_pf,
+                    loading: false
+                })
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    refreshTableClientes = () => {
+        axios.get(BACKEND + `/api/user`)
+            .then(response => {
+
+                this.setState({
+                    usuarios: response.data.data,
                     loading: false
                 })
             })
@@ -81,18 +98,9 @@ class TablaClientes extends Component {
                             options: {
                                 customBodyRender: (value, tableMeta, updateValue) => {
                                     return (
-                                        <ButtonGroup>
-                                            <Tooltip title={"Editar"}>
-                                                <IconButton onClick={() => console.log(value, tableMeta, updateValue)}>
-                                                    <EditIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title={"Borrar"}>
-                                                <IconButton onClick={() => alert("Delete")}>
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </ButtonGroup>
+                                        <React.Fragment>
+                                                <EditClienteDialog tablaMeta={tableMeta} />
+                                            </React.Fragment>
                                     )
                                 },
                                 filter: false,
@@ -105,18 +113,15 @@ class TablaClientes extends Component {
                         selectableRows: 'none',
                         print: false,
                         onRowClick: (rowData, rowMeta) => {
-                            console.log(rowData);
-                            console.log(rowMeta);
+                            this.setState({
+                                filaSeleccionada: rowMeta
+                            })
                         },
                         pagination: true,
                         customToolbar: () => {
                             return (
                                 <React.Fragment>
-                                    <Tooltip title={"Agregar"}>
-                                        <IconButton onClick={() => alert("agregar")}>
-                                            <AddIcon />
-                                        </IconButton>
-                                    </Tooltip>
+                                    <AltaClientesDialog refreshTableClientes={this.refreshTableClientes.bind(this)} />
                                 </React.Fragment>
                             );
                         }
