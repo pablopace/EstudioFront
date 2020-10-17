@@ -100,7 +100,7 @@ class TablaUsuarios extends Component {
                                     customBodyRender: (value, tableMeta, updateValue) => {
                                         return (
                                             <React.Fragment>
-                                                <EditUsuarioDialog tablaMeta={tableMeta} />
+                                                <EditUsuarioDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
                                             </React.Fragment>
 
                                         )

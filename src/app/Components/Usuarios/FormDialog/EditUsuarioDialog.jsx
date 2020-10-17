@@ -19,7 +19,7 @@ const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 export default function FormDialog(props) {
 
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].user);
+  const [user, setUser] = React.useState(props.tablaMeta.rowData[0]);
   const [pass, setPass] = React.useState("");
   const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
@@ -29,6 +29,7 @@ export default function FormDialog(props) {
   const [user_id, setUserId] = React.useState("");
 
   function handleClickOpen() {
+    console.log(props.tablaMeta)
 
     axios.get(BACKEND + `/api/user?user=` + user)
       .then(response => {
@@ -63,6 +64,7 @@ export default function FormDialog(props) {
     })
       .then(response => {
         console.log("OK");
+        props.refreshTableUser();
         setOpen(false);
       })
       .catch(error => {
@@ -72,10 +74,10 @@ export default function FormDialog(props) {
 
   function borrarUsuario() {
     axios.delete(BACKEND + `/api/user/`, {
-      "user": user,
+      "user": user
     })
       .then(response => {
-        console.log("OK");
+        props.refreshTableUser();
       })
       .catch(error => {
         console.log(error);
