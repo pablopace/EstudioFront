@@ -72,9 +72,12 @@ export default function FormDialog(props) {
       })
   }
 
+  
   function borrarUsuario() {
+    console.log("DELETE "+ user);
+
     axios.delete(BACKEND + `/api/user/`, {
-      "user": user
+      data: { "user": user },
     })
       .then(response => {
         props.refreshTableUser();
