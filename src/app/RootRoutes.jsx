@@ -15,6 +15,7 @@ import mapRoutes from "./views/map/MapRoutes";
 import usuariosRoutes from "./Components/Usuarios/UsuariosRoutes";
 import profileRoutes from "./Components/Profile/ProfileRoutes";
 import ClientesRoutes from "./Components/Clientes/ClientesRoutes";
+import impuestosRoutes from "./Components/Impuestos/ImpuestosRoutes";
 
 const redirectRoute = [
   {
@@ -42,6 +43,7 @@ const routes = [
   ...usuariosRoutes,
   ...profileRoutes,
   ...ClientesRoutes,
+  ...impuestosRoutes,
 
   //estos tienen que ir al ultimo 
   ...redirectRoute,

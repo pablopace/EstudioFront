@@ -15,6 +15,11 @@ export const navigations = [
     icon: "perm_contact_calendar"
   },
   {
+    name: "impuestos",
+    path: "/impuestos",
+    icon: "done"
+  },
+  {
     name: "Todos los componentes",
     icon: "toys",
     children: [
