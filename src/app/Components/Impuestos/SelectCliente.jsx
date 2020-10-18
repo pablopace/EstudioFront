@@ -20,26 +20,23 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SelectCliente(props) {
-  let options =  [];
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [options, setOptions] = React.useState([]);
 
   let auth_user = window.localStorage.getItem("auth_user");
   auth_user = JSON.parse(auth_user);
-
+  
   axios.get(BACKEND + `/api/client?user=${auth_user.userId}`)
     .then(response => {
-
-      this.setState({
-        options: response.data.data,
-        loading: false
-      })
+      setOptions(response.data.data)
     })
     .catch(error => {
       console.log(error);
     })
+    
 
   function handleClickListItem(event) {
     setAnchorEl(event.currentTarget);
@@ -54,9 +51,6 @@ export default function SelectCliente(props) {
     setAnchorEl(null);
   }
 
-  function traerClientes() {
-
-  }
 
   return (
     <div className={classes.root}>
