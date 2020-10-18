@@ -18,21 +18,45 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
 export default function FormDialog(props) {
+
+  let auth_user = window.localStorage.getItem("auth_user");
+  auth_user = JSON.parse(auth_user);
+
+  const [user_id, setUser] = React.useState(auth_user.userId);
+
   const [open, setOpen] = React.useState(false);
-  const [nombre, setNombre] = React.useState(props.tablaMeta.tableData[props.tablaMeta.rowIndex].first_name);
+  const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
   const [adress, setAdress] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [telefono, setTelefono] = React.useState("");
   const [zip_code, setZipCode] = React.useState("");
-  const [user_id, setUser] = React.useState("");
-  const [cuil, setCuil] = React.useState("");
+  const [cuit, setCuit] = React.useState(props.tablaMeta.rowData[0]);
   const [ciudad, setCiudad] = React.useState("");
   const [negocio, setNegocio] = React.useState("");
   const [comercial, setComercial] = React.useState("");
 
   function handleClickOpen() {
-    setOpen(true);
+    console.log(props.tablaMeta)
+
+    axios.get(BACKEND + `/api/client?user=${user_id}&cuit=${cuit}`)
+      .then(response => {
+
+        setCuit(response.data.data[0].cuit)
+        setNombre(response.data.data[0].first_name)
+        setApellido(response.data.data[0].last_name)
+        setEmail(response.data.data[0].email)
+        setAdress(response.data.data[0].address)
+        setTelefono(response.data.data[0].phone)
+        setZipCode(response.data.data[0].zip_code)
+        setCiudad(response.data.data[0].city_id)
+
+        setOpen(true);
+          
+      })
+      .catch(error => {
+          console.log(error);
+      }) 
   }
 
   function handleClose() {
@@ -40,18 +64,21 @@ export default function FormDialog(props) {
   }
 
   function handleSaveAndClose() {
-    axios.post(BACKEND + `/api/client`, {
-      // "user":user,
-      // "pass":pass,
-      // "first_name":nombre,
-      // "last_name":apellido,
-      // "email":email,
-      // "role_id":rol
-    })
+    axios.post(BACKEND + `/api/client?user=${user_id}&cuit=${cuit}`,{
+      "user": user_id,
+      "first_name": nombre,
+      "last_name": apellido,
+      "email": email,
+      "phone": telefono, 
+      "address": adress, 
+      "cuit": cuit, 
+      "type_id": 1, 
+      "city_id": ciudad, 
+      "zip_code": zip_code
+  })
       .then(response => {
-        console.log("OK");
+        props.refreshTableUser();
         setOpen(false);
-          
       })
       .catch(error => {
           console.log(error);
@@ -59,7 +86,9 @@ export default function FormDialog(props) {
   }
 
   function borrarCliente(){
-    axios.delete(BACKEND + `/api/client/` + user_id)
+    axios.delete(BACKEND + `/api/client/`, {
+      data: { "cuit": cuit },
+    })
       .then(response => {
         console.log("OK");
       })
@@ -150,8 +179,17 @@ export default function FormDialog(props) {
             label="CUIT"
             type="text"
             fullWidth
-            value={cuil}
-            onChange={e => setCuil(e.target.value) }
+            value={cuit}
+            onChange={e => setCuit(e.target.value) }
+          />
+          <TextField
+            margin="dense"
+            id="ciudad"
+            label="Ciudad"
+            type="text"
+            fullWidth
+            value={ciudad}
+            onChange={e => setCiudad(e.target.value) }
           />
         </DialogContent>
         <DialogActions>

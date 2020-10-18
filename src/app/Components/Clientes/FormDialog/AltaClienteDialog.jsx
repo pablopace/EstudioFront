@@ -14,7 +14,12 @@ import axios from "axios"
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
 export default function FormDialog({refreshTableClientes}) {
-  
+
+  let auth_user = window.localStorage.getItem("auth_user");
+  auth_user = JSON.parse(auth_user);
+
+  const [user_id, setUser] = React.useState(auth_user.userId);
+
   const [open, setOpen] = React.useState(false);
   const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
@@ -22,8 +27,7 @@ export default function FormDialog({refreshTableClientes}) {
   const [email, setEmail] = React.useState("");
   const [telefono, setTelefono] = React.useState("");
   const [zip_code, setZipCode] = React.useState("");
-  const [user_id, setUser] = React.useState("");
-  const [cuil, setCuil] = React.useState("");
+  const [cuit, setCuit] = React.useState("");
   const [ciudad, setCiudad] = React.useState("");
   const [negocio, setNegocio] = React.useState("");
   const [comercial, setComercial] = React.useState("");
@@ -38,15 +42,20 @@ export default function FormDialog({refreshTableClientes}) {
 
   function handleSaveAndClose() {
     axios.put(BACKEND + `/api/client`, {
-      // "user":user,
-      // "pass":pass,
-      // "first_name":nombre,
-      // "last_name":apellido,
-      // "email":email,
-      // "role_id":rol
+      "user": user_id,
+      "first_name": nombre,
+      "last_name": apellido,
+      "email": email,
+      "phone": telefono, 
+      "address": adress, 
+      "cuit": cuit, 
+      "type_id": 1, 
+      "city_id": ciudad, 
+      "zip_code": zip_code
     })
       .then(response => {
-        console.log("OK");
+        console.log("cliente agregado");
+        refreshTableClientes();
         setOpen(false);
           
       })
@@ -76,7 +85,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Nombre"
             type="text"
             fullWidth
-            onChange={e => setUser(e.target.value) }
+            onChange={e => setNombre(e.target.value) }
           />
           <TextField
             margin="dense"
@@ -124,8 +133,17 @@ export default function FormDialog({refreshTableClientes}) {
             label="CUIT"
             type="text"
             fullWidth
-            onChange={e => setCuil(e.target.value) }
+            onChange={e => setCuit(e.target.value) }
           />
+          <TextField
+            margin="dense"
+            id="ciudad"
+            label="Ciudad"
+            type="text"
+            fullWidth
+            onChange={e => setCiudad(e.target.value) }
+          />
+
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" color="secondary" onClick={handleClose}>

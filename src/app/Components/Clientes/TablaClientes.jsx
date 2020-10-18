@@ -28,21 +28,32 @@ class TablaClientes extends Component {
     }
 
     componentDidMount() {
+        this.traerClientes()        
+    }
+
+
+    refreshTableUser = () => {
+        this.traerClientes()  
+    }
+
+
+    traerClientes = () => {
 
         let auth_user = window.localStorage.getItem("auth_user");
         auth_user = JSON.parse(auth_user);
         
-        axios.get(BACKEND + `/api/user?user=${auth_user.userId}`)
+        axios.get(BACKEND + `/api/client?user=${auth_user.userId}`)
             .then(response => {
                 
                 this.setState({
-                    clientes: response.data.data.client_pf,
+                    clientes: response.data.data,
                     loading: false
                 })
             })
             .catch(error => {
                 console.log(error);
             })
+
     }
 
 
@@ -59,10 +70,10 @@ class TablaClientes extends Component {
                     title={"Clientes (persona física)"}
                     data={clientes}
                     columns={[ 
-                       /*{
-                        name: "client_id",
-                        label: "Id",
-                       },*/
+                       {
+                        name: "cuit",
+                        label: "CUIT",
+                       },
                        {
                         name: "first_name",
                         label: "Nombre",
