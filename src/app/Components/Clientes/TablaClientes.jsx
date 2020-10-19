@@ -97,12 +97,12 @@ class TablaClientes extends Component {
                                 customBodyRender: (value, tableMeta, updateValue) => {
                                     return (
                                         <React.Fragment>
-                                                <EditClienteDialog tablaMeta={tableMeta} />
+                                                <EditClienteDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
                                             </React.Fragment>
                                     )
                                 },
-                                filter: false,
-                                sort: false
+                                filter: true,
+                                sort: true
                             }
                         }]}
                     options={{

@@ -64,7 +64,7 @@ export default function FormDialog(props) {
   }
 
   function handleSaveAndClose() {
-    axios.post(BACKEND + `/api/client?user=${user_id}&cuit=${cuit}`,{
+    axios.post(BACKEND + `/api/client`,{
       "user": user_id,
       "first_name": nombre,
       "last_name": apellido,
@@ -91,6 +91,7 @@ export default function FormDialog(props) {
     })
       .then(response => {
         console.log("OK");
+        props.refreshTableUser();
       })
       .catch(error => {
         console.log(error);
