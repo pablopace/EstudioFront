@@ -25,7 +25,7 @@ export default function FormDialog(props) {
 
   const [user_id, setUser] = React.useState(auth_user.userId);
 
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   
 
   function handleClickOpen() {
@@ -46,14 +46,12 @@ export default function FormDialog(props) {
 
 
   return (
-    <div>
-      <ButtonGroup>
+    <React.Fragment>
         <Tooltip title={"Impuestos"}>
           <IconButton onClick={handleClickOpen}>
-            <EditIcon fontSize="small" />
+            <Icon fontSize="small" >insert_drive_file</Icon>
           </IconButton>
         </Tooltip>
-      </ButtonGroup>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -79,6 +77,6 @@ export default function FormDialog(props) {
          
         </DialogActions>
       </Dialog>
-    </div>
+      </React.Fragment>
   );
 }

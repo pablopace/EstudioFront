@@ -116,8 +116,7 @@ export default function FormDialog(props) {
 
 
   return (
-    <div>
-      <ButtonGroup>
+    <React.Fragment>
         <Tooltip title={"Editar"}>
           <IconButton onClick={handleClickOpen}>
             <EditIcon fontSize="small" />
@@ -128,7 +127,6 @@ export default function FormDialog(props) {
             <DeleteIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-      </ButtonGroup>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -219,6 +217,6 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+      </React.Fragment>
   );
 }
