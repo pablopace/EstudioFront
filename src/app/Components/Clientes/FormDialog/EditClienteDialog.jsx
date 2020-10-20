@@ -105,7 +105,7 @@ export default function FormDialog(props) {
 
   function handleClickImpuestos() {
     console.log("impuestos")
-    setOpen(false);
+    setOpen(true);
     return (
       <React.Fragment>
         <ImpuestosDialog />
@@ -118,11 +118,6 @@ export default function FormDialog(props) {
   return (
     <div>
       <ButtonGroup>
-        <Tooltip title={"Impuestos"}>
-          <IconButton onClick={handleClickImpuestos}>
-            <Icon fontSize="small">insert_drive_file</Icon>
-          </IconButton>
-        </Tooltip>
         <Tooltip title={"Editar"}>
           <IconButton onClick={handleClickOpen}>
             <EditIcon fontSize="small" />

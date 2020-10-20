@@ -12,6 +12,7 @@ import axios from "axios"
 import { withSnackbar } from 'notistack';
 import AltaClientesDialog from './FormDialog/AltaClienteDialog'
 import EditClienteDialog from './FormDialog/EditClienteDialog'
+import ImpuestosDialog from './FormDialog/ImpuestosDialog'
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
@@ -97,8 +98,9 @@ class TablaClientes extends Component {
                                 customBodyRender: (value, tableMeta, updateValue) => {
                                     return (
                                         <React.Fragment>
-                                                <EditClienteDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
-                                            </React.Fragment>
+                                            <EditClienteDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
+                                            <ImpuestosDialog refreshTableUser={this.refreshTableUser.bind(this)} />
+                                        </React.Fragment>
                                     )
                                 },
                                 filter: true,

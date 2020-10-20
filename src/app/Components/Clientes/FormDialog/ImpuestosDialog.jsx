@@ -47,7 +47,13 @@ export default function FormDialog(props) {
 
   return (
     <div>
-
+      <ButtonGroup>
+        <Tooltip title={"Impuestos"}>
+          <IconButton onClick={handleClickOpen}>
+            <EditIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </ButtonGroup>
       <Dialog
         open={open}
         onClose={handleClose}
