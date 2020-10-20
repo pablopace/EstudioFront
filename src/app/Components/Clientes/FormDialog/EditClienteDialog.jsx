@@ -14,6 +14,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Icon from '@material-ui/core/Icon';
+import ImpuestosDialog from './ImpuestosDialog';
 
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
@@ -53,40 +54,41 @@ export default function FormDialog(props) {
         setCiudad(response.data.data[0].city_id)
 
         setOpen(true);
-          
+
       })
       .catch(error => {
-          console.log(error);
-      }) 
+        console.log(error);
+      })
   }
 
   function handleClose() {
+
     setOpen(false);
   }
 
   function handleSaveAndClose() {
-    axios.post(BACKEND + `/api/client`,{
+    axios.post(BACKEND + `/api/client`, {
       "user": user_id,
       "first_name": nombre,
       "last_name": apellido,
       "email": email,
-      "phone": telefono, 
-      "address": adress, 
-      "cuit": cuit, 
-      "type_id": 1, 
-      "city_id": ciudad, 
+      "phone": telefono,
+      "address": adress,
+      "cuit": cuit,
+      "type_id": 1,
+      "city_id": ciudad,
       "zip_code": zip_code
-  })
+    })
       .then(response => {
         props.refreshTableUser();
         setOpen(false);
       })
       .catch(error => {
-          console.log(error);
-      })  
+        console.log(error);
+      })
   }
 
-  function borrarCliente(){
+  function borrarCliente() {
     axios.delete(BACKEND + `/api/client/`, {
       data: { "cuit": cuit },
     })
@@ -102,17 +104,23 @@ export default function FormDialog(props) {
 
 
   function handleClickImpuestos() {
-  
-  
+    console.log("impuestos")
+    setOpen(false);
+    return (
+      <React.Fragment>
+        <ImpuestosDialog />
+      </React.Fragment>
+    );
+
   }
 
 
   return (
     <div>
-       <ButtonGroup>
-       <Tooltip title={"Impuestos"}>
+      <ButtonGroup>
+        <Tooltip title={"Impuestos"}>
           <IconButton onClick={handleClickImpuestos}>
-          <Icon fontSize="small">insert_drive_file</Icon>
+            <Icon fontSize="small">insert_drive_file</Icon>
           </IconButton>
         </Tooltip>
         <Tooltip title={"Editar"}>
@@ -131,7 +139,7 @@ export default function FormDialog(props) {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-      <DialogTitle id="form-dialog-title">Editar Cliente</DialogTitle>
+        <DialogTitle id="form-dialog-title">Editar Cliente</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -141,7 +149,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={nombre}
-            onChange={e => setUser(e.target.value) }
+            onChange={e => setUser(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -150,7 +158,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={apellido}
-            onChange={e => setApellido(e.target.value) }
+            onChange={e => setApellido(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -159,7 +167,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={adress}
-            onChange={e => setAdress(e.target.value) }
+            onChange={e => setAdress(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -168,7 +176,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={zip_code}
-            onChange={e => setZipCode(e.target.value) }
+            onChange={e => setZipCode(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -177,7 +185,7 @@ export default function FormDialog(props) {
             type="email"
             fullWidth
             value={email}
-            onChange={e => setEmail(e.target.value) }
+            onChange={e => setEmail(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -186,7 +194,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={telefono}
-            onChange={e => setTelefono(e.target.value) }
+            onChange={e => setTelefono(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -195,7 +203,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={cuit}
-            onChange={e => setCuit(e.target.value) }
+            onChange={e => setCuit(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -204,7 +212,7 @@ export default function FormDialog(props) {
             type="text"
             fullWidth
             value={ciudad}
-            onChange={e => setCiudad(e.target.value) }
+            onChange={e => setCiudad(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
