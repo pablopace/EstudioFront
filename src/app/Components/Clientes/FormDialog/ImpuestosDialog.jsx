@@ -39,47 +39,30 @@ export default function FormDialog(props) {
   const [cuit, setCuit] = React.useState(props.tablaMeta.rowData[0]);
   const [nombre, setNombre] = React.useState(props.tablaMeta.rowData[1]);
   const [apellido, setApellido] = React.useState(props.tablaMeta.rowData[2]);
-  const [open, setOpen] = React.useState(false);
-  const [impuestos, setImpuestos] = React.useState([]);
 
+  const [open, setOpen] = React.useState(false);
+  const [openVencimientos, setOpenVencimientos] = React.useState(false);
+
+  const [impuestos, setImpuestos] = React.useState([]);
+  const [vencimientos, setVencimientos] = React.useState([]);
+  const [nameImp, setNameImp] = React.useState("");
 
 
 
   function handleClickOpen() {
-
     traerImpuestos();
-
   }
 
-
   function traerImpuestos() {
-    axios.get(BACKEND + `/api/impuestos?cuit=${cuit}`)
+    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
       .then(response => {
-
-        //setImpuestos(response.data.data[0].cuit)
-
-        setImpuestos([
-          {
-            nombre: "impuestos uno",
-            dueDate: "2020-01-06"
-          },
-          {
-            nombre: "impuestos dos",
-            dueDate: "2020-01-06"
-          },
-          {
-            nombre: "impuestos tres",
-            dueDate: "2020-01-06"
-          },
-        ])
-
+        setImpuestos(response.data.data)
         setOpen(true)
       })
       .catch(error => {
         console.log(error);
       })
   }
-
 
   function handleClose() {
     setOpen(false);
@@ -89,16 +72,43 @@ export default function FormDialog(props) {
 
   }
 
-
   function borrarImpuesto() {
     console.log("borrar impuesto");
   }
 
+
+
+
+
+  function AbrirVencimientos(name, tax) {
+
+    console.log("abrir vencimiento")
+    //aca deberia ir traerVencimienos()
+
+  }
+
+
+  function traerVencimientos(tax) {
+    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&${tax}`)
+      .then(response => {
+        setVencimientos(response.data.data)
+        //setNameImp(name)
+        setOpenVencimientos(true);
+
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+
+  function CerrarVencimientos() {
+    setOpenVencimientos(false);
+  }
+
   function handleDateChange(fecha) {
     console.log("fecha nueva seteada: " + fecha);
-    traerImpuestos()
   };
-
 
 
   return (
@@ -115,7 +125,7 @@ export default function FormDialog(props) {
       >
         <DialogTitle id="form-dialog-title">Impuestos para {nombre} {apellido}</DialogTitle>
         <DialogContent>
-          <Fab color="primary" aria-label="add" size="small"  align="right">
+          <Fab color="primary" aria-label="add" size="small" align="right">
             <AddIcon />
           </Fab>
           <div className="w-full overflow-auto">
@@ -123,7 +133,6 @@ export default function FormDialog(props) {
               <TableHead>
                 <TableRow>
                   <TableCell className="px-0">Nombre</TableCell>
-                  <TableCell className="px-0">Fecha de Aviso</TableCell>
                   <TableCell className="px-0">Acciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -131,29 +140,13 @@ export default function FormDialog(props) {
                 {impuestos.map((i, index) => (
                   <TableRow key={index}>
                     <TableCell className="px-0 capitalize" align="left">
-                      {i.nombre}
-                    </TableCell>
-
-                    <TableCell className="px-0 capitalize" align="left">
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                          className="mb-4 w-full"
-                          margin="none"
-                          id="mui-pickers-date"
-                          label=""
-                          inputVariant="standard"
-                          type="text"
-                          autoOk={true}
-                          value={i.fecha}
-                          onChange={handleDateChange}
-                          KeyboardButtonProps={{
-                            "aria-label": "change date"
-                          }}
-                        />
-                      </MuiPickersUtilsProvider>
+                      {i.name}
                     </TableCell>
 
                     <TableCell className="px-0">
+                      <IconButton onClick={AbrirVencimientos(i.name, i.tax_id)}>
+                        <Icon fontSize="small" >event_note</Icon>
+                      </IconButton>
                       <IconButton onClick={borrarImpuesto}>
                         <DeleteIcon fontSize="small" />
                       </IconButton>
@@ -172,6 +165,68 @@ export default function FormDialog(props) {
 
         </DialogActions>
       </Dialog>
+
+
+      {/*}
+      <Dialog
+        open={openVencimientos}
+        onClose={CerrarVencimientos}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Vencimientos para {nameImp}</DialogTitle>
+        <DialogContent>
+          <Fab color="primary" aria-label="add" size="small" align="right">
+            <AddIcon />
+          </Fab>
+          <div className="w-full overflow-auto">
+            <Table className="whitespace-pre">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="px-0">Nombre</TableCell>
+                  <TableCell className="px-0">Fecha de Aviso</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {vencimientos.map((x, indexDueDate) => (
+                  <TableRow key={indexDueDate}>
+                    <TableCell className="px-0 capitalize" align="left">
+                      {x.name}
+                    </TableCell>
+
+                    <TableCell className="px-0 capitalize" align="left">
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          className="mb-4 w-full"
+                          margin="none"
+                          id="mui-pickers-date"
+                          label=""
+                          inputVariant="standard"
+                          type="text"
+                          autoOk={true}
+                          value={"10/20/2020"}
+                          onChange={handleDateChange}
+                          KeyboardButtonProps={{
+                            "aria-label": "change date"
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" color="secondary" onClick={CerrarVencimientos}>
+            Cerrar
+          </Button>
+
+        </DialogActions>
+      </Dialog>
+                        */}
+
     </React.Fragment>
   );
 }
