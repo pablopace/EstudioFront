@@ -99,7 +99,7 @@ class TablaClientes extends Component {
                                     return (
                                         <React.Fragment>
                                             <EditClienteDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
-                                            <ImpuestosDialog refreshTableUser={this.refreshTableUser.bind(this)} />
+                                            <ImpuestosDialog tablaMeta={tableMeta} refreshTableUser={this.refreshTableUser.bind(this)} />
                                         </React.Fragment>
                                     )
                                 },
