@@ -7,7 +7,7 @@ const Layout1Settings = {
     bgImgURL: '/assets/images/sidebar/sidebar-bg-dark.jpg'
   },
   topbar: {
-    show: true,
+    show: false,
     fixed: true,
     theme: 'purpleDark1' // View all valid theme colors inside MatxTheme/themeColors.js
   }
