@@ -29,6 +29,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import Fab from '@material-ui/core/Fab';
 
 
+
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
 export default function FormDialog(props) {
@@ -50,10 +51,6 @@ export default function FormDialog(props) {
 
 
   function handleClickOpen() {
-    traerImpuestos();
-  }
-
-  function traerImpuestos() {
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
       .then(response => {
         setImpuestos(response.data.data)
@@ -63,6 +60,7 @@ export default function FormDialog(props) {
         console.log(error);
       })
   }
+
 
   function handleClose() {
     setOpen(false);
@@ -80,27 +78,27 @@ export default function FormDialog(props) {
 
 
 
-  function AbrirVencimientos(name, tax) {
+  function AbrirVencimientos() {
 
     console.log("abrir vencimiento")
     //aca deberia ir traerVencimienos()
 
-  }
+    setOpenVencimientos(true);
 
+  }
 
   function traerVencimientos(tax) {
-    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&${tax}`)
-      .then(response => {
-        setVencimientos(response.data.data)
-        //setNameImp(name)
-        setOpenVencimientos(true);
+    // axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&tax_id${tax}`)
+    //   .then(response => {
+    //     setVencimientos(response.data.data)
+    //     //setNameImp(name)
+    //     setOpenVencimientos(true);
 
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
   }
-
 
   function CerrarVencimientos() {
     setOpenVencimientos(false);
@@ -111,13 +109,20 @@ export default function FormDialog(props) {
   };
 
 
+  function abrirAgregarVencimientos() {
+
+  }
+
+
   return (
     <React.Fragment>
+
       <Tooltip title={"Impuestos"}>
         <IconButton onClick={handleClickOpen}>
           <Icon fontSize="small" >insert_drive_file</Icon>
         </IconButton>
       </Tooltip>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -128,6 +133,7 @@ export default function FormDialog(props) {
           <Fab color="primary" aria-label="add" size="small" align="right">
             <AddIcon />
           </Fab>
+
           <div className="w-full overflow-auto">
             <Table className="whitespace-pre">
               <TableHead>
@@ -144,7 +150,7 @@ export default function FormDialog(props) {
                     </TableCell>
 
                     <TableCell className="px-0">
-                      <IconButton onClick={AbrirVencimientos(i.name, i.tax_id)}>
+                      <IconButton onClick={AbrirVencimientos()}>
                         <Icon fontSize="small" >event_note</Icon>
                       </IconButton>
                       <IconButton onClick={borrarImpuesto}>
@@ -167,19 +173,19 @@ export default function FormDialog(props) {
       </Dialog>
 
 
-      {/*}
+
       <Dialog
         open={openVencimientos}
         onClose={CerrarVencimientos}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Vencimientos para {nameImp}</DialogTitle>
+        <DialogTitle id="form-dialog-title">Vencimientos </DialogTitle>
         <DialogContent>
           <Fab color="primary" aria-label="add" size="small" align="right">
             <AddIcon />
           </Fab>
           <div className="w-full overflow-auto">
-            <Table className="whitespace-pre">
+            {/* <Table className="whitespace-pre">
               <TableHead>
                 <TableRow>
                   <TableCell className="px-0">Nombre</TableCell>
@@ -204,7 +210,7 @@ export default function FormDialog(props) {
                           type="text"
                           autoOk={true}
                           value={"10/20/2020"}
-                          onChange={handleDateChange}
+                          //onChange={handleDateChange}
                           KeyboardButtonProps={{
                             "aria-label": "change date"
                           }}
@@ -214,7 +220,7 @@ export default function FormDialog(props) {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table> */}
           </div>
 
         </DialogContent>
@@ -222,10 +228,9 @@ export default function FormDialog(props) {
           <Button variant="outlined" color="secondary" onClick={CerrarVencimientos}>
             Cerrar
           </Button>
-
         </DialogActions>
       </Dialog>
-                        */}
+
 
     </React.Fragment>
   );
