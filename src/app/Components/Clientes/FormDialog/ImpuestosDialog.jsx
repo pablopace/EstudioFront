@@ -82,8 +82,8 @@ export default function FormDialog(props) {
 
   function AbrirVencimientos(name, tax) {
 
-    console.log("abrir vencimiento")
-    //aca deberia ir traerVencimienos()
+    console.log("abrir vencimiento", name, tax);
+    traerVencimientos(tax);
 
   }
 
@@ -144,7 +144,7 @@ export default function FormDialog(props) {
                     </TableCell>
 
                     <TableCell className="px-0">
-                      <IconButton onClick={AbrirVencimientos(i.name, i.tax_id)}>
+                      <IconButton onClick={ () => AbrirVencimientos(i.name, i.tax_id) }>
                         <Icon fontSize="small" >event_note</Icon>
                       </IconButton>
                       <IconButton onClick={borrarImpuesto}>
@@ -167,7 +167,7 @@ export default function FormDialog(props) {
       </Dialog>
 
 
-      {/*}
+      
       <Dialog
         open={openVencimientos}
         onClose={CerrarVencimientos}
@@ -225,7 +225,7 @@ export default function FormDialog(props) {
 
         </DialogActions>
       </Dialog>
-                        */}
+                        
 
     </React.Fragment>
   );
