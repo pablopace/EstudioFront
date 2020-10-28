@@ -6,6 +6,11 @@ const dashboardRoutes = [
     path: "/dashboard/analytics",
     component: React.lazy(() => import("./Analytics")),
     auth: authRoles.admin
+  },
+  {
+    path: "/dashboard/blanco",
+    component: React.lazy(() => import("./DashEnBlanco")),
+    auth: authRoles.admin
   }
 ];
 

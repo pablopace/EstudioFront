@@ -1,7 +1,7 @@
 export const navigations = [
   {
     name: "Dashboard",
-    path: "/dashboard/analytics",
+    path: "/dashboard/blanco",
     icon: "dashboard"
   },
   {
