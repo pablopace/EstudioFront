@@ -27,6 +27,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Fab from '@material-ui/core/Fab';
+import Switch from '@material-ui/core/Switch';
 
 
 
@@ -43,15 +44,19 @@ export default function FormDialog(props) {
 
   const [open, setOpen] = React.useState(false);
   const [openVencimientos, setOpenVencimientos] = React.useState(false);
+  const [openAddVencimientos, setOpenAddVencimientos] = React.useState(false);
 
   const [impuestos, setImpuestos] = React.useState([]);
   const [vencimientos, setVencimientos] = React.useState([]);
+  const [listaVencimientos, setListaVencimientos] = React.useState([]);
   const [nameImp, setNameImp] = React.useState("");
   const [idImp, setIdImp] = React.useState("");
 
 
 
-///Impuestos
+
+
+  ///Impuestos
 
   function handleClickOpen() {
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
@@ -68,10 +73,6 @@ export default function FormDialog(props) {
     setOpen(false);
   }
 
-  function handleSaveAndClose() {
-
-  }
-
   function borrarImpuesto() {
     console.log("borrar impuesto");
   }
@@ -84,21 +85,21 @@ export default function FormDialog(props) {
 
   function AbrirVencimientos(name, tax) {
     console.log("abrir vencimiento", name, tax);
-    traerVencimientos(name,tax)
+    traerVencimientos(name, tax)
     setOpenVencimientos(true);
   }
-  
 
-  function traerVencimientos(name,tax){
+
+  function traerVencimientos(name, tax) {
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&tax_id=${tax}`)
-    .then(response => {
-      setVencimientos(response.data.data)
-      setNameImp(name)
-      setIdImp(tax)
-    })
-    .catch(error => {
-      console.log(error);
-    })
+      .then(response => {
+        setVencimientos(response.data.data)
+        setNameImp(name)
+        setIdImp(tax)
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   function CerrarVencimientos() {
@@ -106,28 +107,50 @@ export default function FormDialog(props) {
   }
 
   function handleDateChange(fecha, due) {
-    console.log("fecha nueva seteada: " + fecha + " due:"+due );
+    console.log("fecha nueva seteada: " + fecha + " due:" + due);
 
-    axios.post(BACKEND + `/api/tax/client/alert`,{
+    axios.post(BACKEND + `/api/tax/client/alert`, {
       cuit: cuit,
       tax_id: idImp,
       due_id: due,
       alert_date: fecha
     })
-    .then(response => {
-      traerVencimientos(nameImp,idImp)
-    })
-    .catch(error => {
-      console.log(error);
-    })
-  
+      .then(response => {
+        traerVencimientos(nameImp, idImp)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
   };
 
 
 
+  ///Agregar Vencimiento
+
   function abrirAgregarVencimientos() {
 
+    axios.get(BACKEND + `/api/tax/`)
+      .then(response => {
+        setListaVencimientos(response.data.data)
+        setOpenAddVencimientos(true)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
   }
+
+  function CerrarAddVencimientos() {
+    setOpenAddVencimientos(false)
+  }
+
+  function handleChangeCheckBox() {
+    
+  }
+
+  
+
 
 
   return (
@@ -147,7 +170,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Impuestos para {nombre} {apellido}</DialogTitle>
         <DialogContent>
           <Fab color="primary" aria-label="add" size="small" align="right">
-            <AddIcon />
+            <AddIcon onClick={abrirAgregarVencimientos} />
           </Fab>
 
           <div className="w-full overflow-auto">
@@ -166,7 +189,7 @@ export default function FormDialog(props) {
                     </TableCell>
 
                     <TableCell className="px-0">
-                      <IconButton onClick={ () => AbrirVencimientos(i.name, i.tax_id) }>
+                      <IconButton onClick={() => AbrirVencimientos(i.name, i.tax_id)}>
                         <Icon fontSize="small" >event_note</Icon>
                       </IconButton>
                       <IconButton onClick={borrarImpuesto}>
@@ -189,7 +212,10 @@ export default function FormDialog(props) {
       </Dialog>
 
 
-      
+
+
+
+
       <Dialog
         open={openVencimientos}
         onClose={CerrarVencimientos}
@@ -198,7 +224,7 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Vencimientos para Impuesto {nameImp} </DialogTitle>
         <DialogContent>
           <div className="w-full overflow-auto">
-            { <Table className="whitespace-pre">
+            {<Table className="whitespace-pre">
               <TableHead>
                 <TableRow>
                   <TableCell className="px-0">Nombre</TableCell>
@@ -209,7 +235,7 @@ export default function FormDialog(props) {
                 {vencimientos.map((x, indexDueDate) => (
                   <TableRow key={indexDueDate}>
                     <TableCell className="px-0 capitalize" align="left">
-                      {x.name} {x.date}
+                      {x.name} &lt;{x.date}&gt;
                     </TableCell>
 
                     <TableCell className="px-0 capitalize" align="left">
@@ -217,15 +243,15 @@ export default function FormDialog(props) {
                         <KeyboardDatePicker
                           className="mb-4 w-full"
                           margin="none"
-                          id={"mui-pickers-date"+x.due_id}
+                          id={"mui-pickers-date" + x.due_id}
                           label=""
                           inputVariant="standard"
                           format="dd/MM/yyyy"
                           type="text"
                           autoOk={true}
                           invalidDateMessage="Fecha invalida"
-                          value={x.alert_date?x.alert_date :null}
-                          onChange={ val => { handleDateChange(val, x.due_id) }}
+                          value={x.alert_date ? x.alert_date : null}
+                          onChange={val => { handleDateChange(val, x.due_id) }}
                           KeyboardButtonProps={{
                             "aria-label": "change date"
                           }}
@@ -235,7 +261,7 @@ export default function FormDialog(props) {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table> }
+            </Table>}
           </div>
 
         </DialogContent>
@@ -245,7 +271,61 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-                        
+
+
+
+
+
+
+      <Dialog
+        open={openAddVencimientos}
+        onClose={CerrarAddVencimientos}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title"> Agregar Impuesto </DialogTitle>
+        <DialogContent>
+          <div className="w-full overflow-auto">
+            {<Table className="whitespace-pre">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="px-0">Id</TableCell>
+                  <TableCell className="px-0">Nombre</TableCell>
+                  <TableCell className="px-0">Check</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {listaVencimientos.map((x, tax_id) => (
+                  <TableRow key={tax_id}>
+                    <TableCell className="px-0 capitalize" align="left">
+                      {x.tax_id}
+                    </TableCell>
+                    <TableCell className="px-0 capitalize" align="left">
+                      {x.name}
+                    </TableCell>
+
+                    <TableCell className="px-0 capitalize" align="left">
+                      <Switch
+                        checked={true}
+                        onChange={handleChangeCheckBox}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>}
+          </div>
+
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" color="secondary" onClick={CerrarAddVencimientos}>
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
     </React.Fragment>
   );
