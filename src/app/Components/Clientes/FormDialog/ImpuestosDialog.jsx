@@ -83,21 +83,22 @@ export default function FormDialog(props) {
   ////Vencimientos
 
   function AbrirVencimientos(name, tax) {
-
     console.log("abrir vencimiento", name, tax);
+    traerVencimientos(name,tax)
+    setOpenVencimientos(true);
+  }
+  
 
+  function traerVencimientos(name,tax){
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&tax_id=${tax}`)
     .then(response => {
       setVencimientos(response.data.data)
       setNameImp(name)
       setIdImp(tax)
-      setOpenVencimientos(true);
-
     })
     .catch(error => {
       console.log(error);
     })
-    
   }
 
   function CerrarVencimientos() {
@@ -114,7 +115,7 @@ export default function FormDialog(props) {
       alert_date: fecha
     })
     .then(response => {
-     
+      traerVencimientos(nameImp,idImp)
     })
     .catch(error => {
       console.log(error);
@@ -196,9 +197,6 @@ export default function FormDialog(props) {
       >
         <DialogTitle id="form-dialog-title">Vencimientos para Impuesto {nameImp} </DialogTitle>
         <DialogContent>
-          <Fab color="primary" aria-label="add" size="small" align="right">
-            <AddIcon />
-          </Fab>
           <div className="w-full overflow-auto">
             { <Table className="whitespace-pre">
               <TableHead>
@@ -225,7 +223,6 @@ export default function FormDialog(props) {
                           format="dd/MM/yyyy"
                           type="text"
                           autoOk={true}
-                          disablePast={true}
                           invalidDateMessage="Fecha invalida"
                           value={x.alert_date?x.alert_date :null}
                           onChange={ val => { handleDateChange(val, x.due_id) }}
