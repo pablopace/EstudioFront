@@ -305,7 +305,7 @@ export default function FormDialog(props) {
 
                     <TableCell className="px-0 capitalize" align="left">
                       <Switch
-                        checked={true}
+                        checked={x.tax_id}
                         onChange={handleChangeCheckBox}
                         color="primary"
                         name="checkedB"
