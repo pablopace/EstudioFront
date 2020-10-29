@@ -47,8 +47,11 @@ export default function FormDialog(props) {
   const [impuestos, setImpuestos] = React.useState([]);
   const [vencimientos, setVencimientos] = React.useState([]);
   const [nameImp, setNameImp] = React.useState("");
+  const [idImp, setIdImp] = React.useState("");
 
 
+
+///Impuestos
 
   function handleClickOpen() {
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
@@ -60,7 +63,6 @@ export default function FormDialog(props) {
         console.log(error);
       })
   }
-
 
   function handleClose() {
     setOpen(false);
@@ -78,35 +80,48 @@ export default function FormDialog(props) {
 
 
 
+  ////Vencimientos
+
   function AbrirVencimientos(name, tax) {
 
     console.log("abrir vencimiento", name, tax);
-    traerVencimientos(tax);
 
-    setOpenVencimientos(true);
+    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&tax_id=${tax}`)
+    .then(response => {
+      setVencimientos(response.data.data)
+      setNameImp(name)
+      setIdImp(tax)
+      setOpenVencimientos(true);
 
-  }
-
-  function traerVencimientos(tax) {
-    // axios.get(BACKEND + `/api/tax/client?cuit=${cuit}&tax_id${tax}`)
-    //   .then(response => {
-    //     setVencimientos(response.data.data)
-    //     //setNameImp(name)
-    //     setOpenVencimientos(true);
-
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   })
+    })
+    .catch(error => {
+      console.log(error);
+    })
+    
   }
 
   function CerrarVencimientos() {
     setOpenVencimientos(false);
   }
 
-  function handleDateChange(fecha) {
-    console.log("fecha nueva seteada: " + fecha);
+  function handleDateChange(fecha, due) {
+    console.log("fecha nueva seteada: " + fecha + " due:"+due );
+
+    axios.post(BACKEND + `/api/tax/client/alert`,{
+      cuit: cuit,
+      tax_id: idImp,
+      due_id: due,
+      alert_date: fecha
+    })
+    .then(response => {
+     
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  
   };
+
 
 
   function abrirAgregarVencimientos() {
@@ -179,7 +194,7 @@ export default function FormDialog(props) {
         onClose={CerrarVencimientos}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Vencimientos </DialogTitle>
+        <DialogTitle id="form-dialog-title">Vencimientos para Impuesto {nameImp} </DialogTitle>
         <DialogContent>
           <Fab color="primary" aria-label="add" size="small" align="right">
             <AddIcon />
@@ -196,7 +211,7 @@ export default function FormDialog(props) {
                 {vencimientos.map((x, indexDueDate) => (
                   <TableRow key={indexDueDate}>
                     <TableCell className="px-0 capitalize" align="left">
-                      {x.name}
+                      {x.name} {x.date}
                     </TableCell>
 
                     <TableCell className="px-0 capitalize" align="left">
@@ -204,13 +219,16 @@ export default function FormDialog(props) {
                         <KeyboardDatePicker
                           className="mb-4 w-full"
                           margin="none"
-                          id="mui-pickers-date"
+                          id={"mui-pickers-date"+x.due_id}
                           label=""
                           inputVariant="standard"
+                          format="dd/MM/yyyy"
                           type="text"
                           autoOk={true}
-                          value={"10/20/2020"}
-                          //onChange={handleDateChange}
+                          disablePast={true}
+                          invalidDateMessage="Fecha invalida"
+                          value={x.alert_date?x.alert_date :null}
+                          onChange={ val => { handleDateChange(val, x.due_id) }}
                           KeyboardButtonProps={{
                             "aria-label": "change date"
                           }}
