@@ -86,9 +86,6 @@ export default function FormDialog(props) {
     setOpen(false);
   }
 
-  function borrarImpuesto() {
-    console.log("borrar impuesto");
-  }
 
 
 
@@ -237,7 +234,7 @@ export default function FormDialog(props) {
               <TableHead>
                 <TableRow>
                   <TableCell className="px-0">Nombre</TableCell>
-                  <TableCell className="px-0">Acciones</TableCell>
+                  <TableCell className="px-0">Setear Alertar de Aviso</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -251,9 +248,7 @@ export default function FormDialog(props) {
                       <IconButton onClick={() => AbrirVencimientos(i.name, i.tax_id)}>
                         <Icon fontSize="small" >event_note</Icon>
                       </IconButton>
-                      <IconButton onClick={borrarImpuesto}>
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
+
                     </TableCell>
                   </TableRow>
                 ))}
