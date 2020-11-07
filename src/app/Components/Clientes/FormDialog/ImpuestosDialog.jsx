@@ -46,11 +46,12 @@ export default function FormDialog(props) {
   const [openVencimientos, setOpenVencimientos] = React.useState(false);
   const [openAddVencimientos, setOpenAddVencimientos] = React.useState(false);
 
-  const [impuestos, setImpuestos] = React.useState([]);
+  const [impuestos, setImpuestos] = React.useState([]);  //solo los impuestos del cliente. 
   const [vencimientos, setVencimientos] = React.useState([]);
-  const [listaVencimientos, setListaVencimientos] = React.useState([]);
+  const [impuestosTodos, setImpuestosTodos] = React.useState([]);// todos los impustos seteados en la bbdd
   const [nameImp, setNameImp] = React.useState("");
   const [idImp, setIdImp] = React.useState("");
+
 
 
 
@@ -59,15 +60,27 @@ export default function FormDialog(props) {
   ///Impuestos
 
   function handleClickOpen() {
-    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
-      .then(response => {
-        setImpuestos(response.data.data)
-        setOpen(true)
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    traerImpuestos()
   }
+
+  function traerImpuestos(){
+    axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
+    .then(response => {
+
+      setImpuestos(response.data.data.map(i => {
+        return {
+          "name": i.name,
+          "tax_id": i.tax_id
+        }
+      }))
+
+      setOpen(true)
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
+
 
   function handleClose() {
     setOpen(false);
@@ -130,26 +143,72 @@ export default function FormDialog(props) {
 
   function abrirAgregarVencimientos() {
 
-    axios.get(BACKEND + `/api/tax/`)
-      .then(response => {
-        setListaVencimientos(response.data.data)
-        setOpenAddVencimientos(true)
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    traerTodosLosImpuestos();
 
+    console.log(impuestos);
+    console.log(impuestosTodos);
+  }
+
+  function traerTodosLosImpuestos() {
+    axios.get(BACKEND + `/api/tax/`)
+    .then(response => {
+      setImpuestosTodos(response.data.data)
+      setOpenAddVencimientos(true)
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   function CerrarAddVencimientos() {
     setOpenAddVencimientos(false)
   }
 
-  function handleChangeCheckBox() {
-    
+  function handleChangeCheckBox(event) {
+    console.log(event)
+    console.log(event.target.checked)
+    console.log(event.target.name.length)
+
+    let tax = event.target.name.substring(8,event.target.name.length)
+
+    if (event.target.checked) {
+      console.log("PUT cuit "+cuit+" tax_id "+tax)
+
+      axios.put(BACKEND + `/api/tax/client`, {
+        "cuit": cuit,
+        "tax_id": tax
+      })
+        .then(response => {
+          console.log("impuesto asociado");
+          traerImpuestos();
+          traerTodosLosImpuestos();
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+    } else {
+      console.log("DELETE cuit "+cuit+" tax_id "+tax)
+
+      axios.delete(BACKEND + `/api/tax/client`, {
+        "cuit": cuit,
+        "tax_id": tax
+      })
+        .then(response => {
+          console.log("impuesto desasociado");
+          traerImpuestos();
+          traerTodosLosImpuestos();
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+
+    }
+
   }
 
-  
+
 
 
 
@@ -294,7 +353,7 @@ export default function FormDialog(props) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {listaVencimientos.map((x, tax_id) => (
+                {impuestosTodos.map((x, tax_id) => (
                   <TableRow key={tax_id}>
                     <TableCell className="px-0 capitalize" align="left">
                       {x.tax_id}
@@ -305,10 +364,10 @@ export default function FormDialog(props) {
 
                     <TableCell className="px-0 capitalize" align="left">
                       <Switch
-                        checked={x.tax_id}
+                        checked={impuestos.some((imp) => imp.tax_id === x.tax_id)}
                         onChange={handleChangeCheckBox}
                         color="primary"
-                        name="checkedB"
+                        name={"checkBox" + x.tax_id}
                         inputProps={{ 'aria-label': 'primary checkbox' }}
                       />
                     </TableCell>
