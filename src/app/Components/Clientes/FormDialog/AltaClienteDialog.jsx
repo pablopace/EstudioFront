@@ -10,10 +10,32 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import axios from "axios"
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-export default function FormDialog({refreshTableClientes}) {
+const ciudadesMock = [
+  {
+    name: "Buenos Aires, CABA",
+    city_id: 1
+  },
+  {
+    name: "Buenos Aires, Avellaneda",
+    city_id: 2
+  },
+  {
+    name: "Buenos Aires, Lanus",
+    city_id: 3
+  },
+  {
+    name: "Cordoba, La Falda",
+    city_id: 4
+  }
+]
+
+export default function FormDialog({ refreshTableClientes }) {
 
   let auth_user = window.localStorage.getItem("auth_user");
   auth_user = JSON.parse(auth_user);
@@ -32,8 +54,24 @@ export default function FormDialog({refreshTableClientes}) {
   const [negocio, setNegocio] = React.useState("");
   const [comercial, setComercial] = React.useState("");
 
+  const [ciudades, setCiudades] = React.useState([]);
+
+
+
+
   function handleClickOpen() {
-    setOpen(true);
+
+    axios.get(BACKEND + `/api/cities`)
+      .then(response => {
+        console.log("buscar listado de ciudades");
+        setCiudades(ciudadesMock)
+        setOpen(true);
+
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
   }
 
   function handleClose() {
@@ -46,38 +84,39 @@ export default function FormDialog({refreshTableClientes}) {
       "first_name": nombre,
       "last_name": apellido,
       "email": email,
-      "phone": telefono, 
-      "address": adress, 
-      "cuit": cuit, 
-      "type_id": 1, 
-      "city_id": ciudad, 
+      "phone": telefono,
+      "address": adress,
+      "cuit": cuit,
+      "type_id": 1,
+      "city_id": ciudad,
       "zip_code": zip_code
     })
       .then(response => {
         console.log("cliente agregado");
         refreshTableClientes();
         setOpen(false);
-          
+
       })
       .catch(error => {
-          console.log(error);
-      })  
+        console.log(error);
+      })
   }
+
 
   return (
     <div>
       <Tooltip title={"Agregar"}>
-          <IconButton onClick={handleClickOpen}>
-              <AddIcon />
-          </IconButton>
+        <IconButton onClick={handleClickOpen}>
+          <AddIcon />
+        </IconButton>
       </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-      <DialogTitle id="form-dialog-title">Nuevo Cliente</DialogTitle>
-      <DialogContent>
+        <DialogTitle id="form-dialog-title">Nuevo Cliente</DialogTitle>
+        <DialogContent>
           <TextField
             autoFocus
             margin="dense"
@@ -85,7 +124,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Nombre"
             type="text"
             fullWidth
-            onChange={e => setNombre(e.target.value) }
+            onChange={e => setNombre(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -93,7 +132,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Apellido"
             type="text"
             fullWidth
-            onChange={e => setApellido(e.target.value) }
+            onChange={e => setApellido(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -101,7 +140,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Dirección"
             type="text"
             fullWidth
-            onChange={e => setAdress(e.target.value) }
+            onChange={e => setAdress(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -109,7 +148,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Código postal"
             type="text"
             fullWidth
-            onChange={e => setZipCode(e.target.value) }
+            onChange={e => setZipCode(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -117,7 +156,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Email Address"
             type="email"
             fullWidth
-            onChange={e => setEmail(e.target.value) }
+            onChange={e => setEmail(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -125,7 +164,7 @@ export default function FormDialog({refreshTableClientes}) {
             label="Telefono"
             type="text"
             fullWidth
-            onChange={e => setTelefono(e.target.value) }
+            onChange={e => setTelefono(e.target.value)}
           />
           <TextField
             margin="dense"
@@ -133,16 +172,27 @@ export default function FormDialog({refreshTableClientes}) {
             label="CUIT"
             type="text"
             fullWidth
-            onChange={e => setCuit(e.target.value) }
+            onChange={e => setCuit(e.target.value)}
           />
-          <TextField
-            margin="dense"
-            id="ciudad"
-            label="Ciudad"
-            type="text"
-            fullWidth
-            onChange={e => setCiudad(e.target.value) }
-          />
+
+          <InputLabel style={  {marginTop: 15}} htmlFor="ciudad-native-simple">Ciudad</InputLabel>
+          <Select style={  {minWidth: 535.2, }}
+          margin="dense"
+            native
+            value={ciudad}
+            onChange={e => setCiudad(e.target.value)}
+            inputProps={{
+              name: 'ciudad-native-simple',
+              id: 'ciudad-native-simple',
+            }}
+          >
+            <option aria-label="None" value="" />
+
+            {ciudades.map( c => <option value={c.city_id}>{c.name}</option>)}
+            
+          </Select>
+
+
 
         </DialogContent>
         <DialogActions>
