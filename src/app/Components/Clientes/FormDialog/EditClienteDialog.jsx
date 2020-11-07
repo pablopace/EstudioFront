@@ -15,9 +15,35 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Icon from '@material-ui/core/Icon';
 import ImpuestosDialog from './ImpuestosDialog';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
+
 
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
+
+
+const ciudadesMock = [
+  {
+    name: "Buenos Aires, CABA",
+    city_id: 1
+  },
+  {
+    name: "Buenos Aires, Avellaneda",
+    city_id: 2
+  },
+  {
+    name: "Buenos Aires, Lanus",
+    city_id: 3
+  },
+  {
+    name: "Cordoba, La Falda",
+    city_id: 4
+  }
+]
+
+
 
 export default function FormDialog(props) {
 
@@ -38,6 +64,9 @@ export default function FormDialog(props) {
   const [negocio, setNegocio] = React.useState("");
   const [comercial, setComercial] = React.useState("");
 
+  const [ciudades, setCiudades] = React.useState([]);
+
+
   function handleClickOpen() {
     console.log(props.tablaMeta)
 
@@ -53,12 +82,26 @@ export default function FormDialog(props) {
         setZipCode(response.data.data[0].zip_code)
         setCiudad(response.data.data[0].city_id)
 
+        traerTodasLasCiudades()
+
         setOpen(true);
 
       })
       .catch(error => {
         console.log(error);
       })
+  }
+
+  function traerTodasLasCiudades() {
+
+    axios.get(BACKEND + `/api/cities`)
+    .then(response => {
+      console.log("buscar listado de ciudades");
+      setCiudades(ciudadesMock)
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   function handleClose() {
@@ -117,16 +160,16 @@ export default function FormDialog(props) {
 
   return (
     <React.Fragment>
-        <Tooltip title={"Editar"}>
-          <IconButton onClick={handleClickOpen}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title={"Borrar"}>
-          <IconButton onClick={borrarCliente}>
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+      <Tooltip title={"Editar"}>
+        <IconButton onClick={handleClickOpen}>
+          <EditIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title={"Borrar"}>
+        <IconButton onClick={borrarCliente}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -198,7 +241,9 @@ export default function FormDialog(props) {
             value={cuit}
             onChange={e => setCuit(e.target.value)}
           />
-          <TextField
+
+
+          {/* <TextField
             margin="dense"
             id="ciudad"
             label="Ciudad"
@@ -206,7 +251,29 @@ export default function FormDialog(props) {
             fullWidth
             value={ciudad}
             onChange={e => setCiudad(e.target.value)}
-          />
+          /> */}
+
+
+          <InputLabel style={{ marginTop: 15 }} htmlFor="ciudad-native-simple">Ciudad</InputLabel>
+          <Select style={{ minWidth: 535.2, }}
+            margin="dense"
+            native
+            value={ciudad}
+            onChange={e => setCiudad(e.target.value)}
+            inputProps={{
+              name: 'ciudad-native-simple',
+              id: 'ciudad-native-simple',
+            }}
+          >
+            <option aria-label="None" value="" />
+
+            {ciudades.map(c => <option value={c.city_id}>{c.name}</option>)}
+
+          </Select>
+
+
+
+
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" color="secondary" onClick={handleClose}>
@@ -217,6 +284,6 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      </React.Fragment>
+    </React.Fragment>
   );
 }
