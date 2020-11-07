@@ -63,22 +63,22 @@ export default function FormDialog(props) {
     traerImpuestos()
   }
 
-  function traerImpuestos(){
+  function traerImpuestos() {
     axios.get(BACKEND + `/api/tax/client?cuit=${cuit}`)
-    .then(response => {
+      .then(response => {
 
-      setImpuestos(response.data.data.map(i => {
-        return {
-          "name": i.name,
-          "tax_id": i.tax_id
-        }
-      }))
+        setImpuestos(response.data.data.map(i => {
+          return {
+            "name": i.name,
+            "tax_id": i.tax_id
+          }
+        }))
 
-      setOpen(true)
-    })
-    .catch(error => {
-      console.log(error);
-    })
+        setOpen(true)
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
 
@@ -148,13 +148,13 @@ export default function FormDialog(props) {
 
   function traerTodosLosImpuestos() {
     axios.get(BACKEND + `/api/tax/`)
-    .then(response => {
-      setImpuestosTodos(response.data.data)
-      setOpenAddVencimientos(true)
-    })
-    .catch(error => {
-      console.log(error);
-    })
+      .then(response => {
+        setImpuestosTodos(response.data.data)
+        setOpenAddVencimientos(true)
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   function CerrarAddVencimientos() {
@@ -166,10 +166,10 @@ export default function FormDialog(props) {
     console.log(event.target.checked)
     console.log(event.target.name.length)
 
-    let tax = event.target.name.substring(8,event.target.name.length)
+    let tax = event.target.name.substring(8, event.target.name.length)
 
     if (event.target.checked) {
-      console.log("PUT cuit "+cuit+" tax_id "+tax)
+      console.log("PUT cuit " + cuit + " tax_id " + tax)
 
       axios.put(BACKEND + `/api/tax/client`, {
         "cuit": cuit,
@@ -185,11 +185,13 @@ export default function FormDialog(props) {
         })
 
     } else {
-      console.log("DELETE cuit "+cuit+" tax_id "+tax)
+      console.log("DELETE cuit " + cuit + " tax_id " + tax)
 
       axios.delete(BACKEND + `/api/tax/client`, {
-        "cuit": cuit,
-        "tax_id": tax
+        data: {
+          "cuit": cuit,
+          "tax_id": tax
+        }
       })
         .then(response => {
           console.log("impuesto desasociado");
