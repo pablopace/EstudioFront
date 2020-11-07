@@ -13,6 +13,10 @@ import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from '@material-ui/core/InputLabel';
+
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
@@ -72,9 +76,9 @@ export default function FormDialog(props) {
       })
   }
 
-  
+
   function borrarUsuario() {
-    console.log("DELETE "+ user);
+    console.log("DELETE " + user);
 
     axios.delete(BACKEND + `/api/user/`, {
       data: { "user": user },
@@ -155,7 +159,7 @@ export default function FormDialog(props) {
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-          <TextField
+          {/* <TextField
             margin="dense"
             id="role_id"
             label="Rol"
@@ -163,7 +167,27 @@ export default function FormDialog(props) {
             fullWidth
             value={rol}
             onChange={e => setRol(e.target.value)}
-          />
+          /> */}
+
+          <InputLabel style={{ marginTop: 15 }} htmlFor="rol-native-simple">Rol</InputLabel>
+          <Select style={{ minWidth: 535.2, }}
+            margin="dense"
+            native
+            value={rol}
+            onChange={e => setRol(e.target.value)}
+            inputProps={{
+              name: 'rol-native-simple',
+              id: 'rol-native-simple',
+            }}
+          >
+            <option aria-label="None" value="" />
+            <option value={1}>Supervisor</option>
+            <option value={2}>Empleado</option>
+
+          </Select>
+
+
+
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" color="secondary" onClick={handleClose}>
