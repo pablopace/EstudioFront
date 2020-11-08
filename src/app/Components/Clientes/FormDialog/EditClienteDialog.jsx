@@ -94,10 +94,10 @@ export default function FormDialog(props) {
 
   function traerTodasLasCiudades() {
 
-    axios.get(BACKEND + `/api/cities`)
+    axios.get(BACKEND + `/api/catalog/location`)
     .then(response => {
       console.log("buscar listado de ciudades");
-      setCiudades(ciudadesMock)
+      setCiudades(response.data.data)
     })
     .catch(error => {
       console.log(error);
@@ -267,7 +267,7 @@ export default function FormDialog(props) {
           >
             <option aria-label="None" value="" />
 
-            {ciudades.map(c => <option value={c.city_id}>{c.name}</option>)}
+            {ciudades.map(c => <option value={c.city_id}>{c.description}</option>)}
 
           </Select>
 

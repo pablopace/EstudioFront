@@ -16,24 +16,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 
 const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 
-const ciudadesMock = [
-  {
-    name: "Buenos Aires, CABA",
-    city_id: 1
-  },
-  {
-    name: "Buenos Aires, Avellaneda",
-    city_id: 2
-  },
-  {
-    name: "Buenos Aires, Lanus",
-    city_id: 3
-  },
-  {
-    name: "Cordoba, La Falda",
-    city_id: 4
-  }
-]
 
 export default function FormDialog({ refreshTableClientes }) {
 
@@ -61,10 +43,12 @@ export default function FormDialog({ refreshTableClientes }) {
 
   function handleClickOpen() {
 
-    axios.get(BACKEND + `/api/cities`)
+    axios.get(BACKEND + `/api/catalog/location`)
       .then(response => {
         console.log("buscar listado de ciudades");
-        setCiudades(ciudadesMock)
+        setCiudades(response.data.data)
+        //setCiudades(ciudadesMock)
+        //console.log(response.data.data);
         setOpen(true);
 
       })
@@ -188,7 +172,7 @@ export default function FormDialog({ refreshTableClientes }) {
           >
             <option aria-label="None" value="" />
 
-            {ciudades.map( c => <option value={c.city_id}>{c.name}</option>)}
+            {ciudades.map( c => <option value={c.city_id}>{c.description}</option>)}
             
           </Select>
 
