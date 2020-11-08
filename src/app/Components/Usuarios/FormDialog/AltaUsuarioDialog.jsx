@@ -20,11 +20,23 @@ const BACKEND = process.env.REACT_APP_BACKEND_ENDPOINT;
 export default function FormDialog({ refreshTableUser }) {
   const [open, setOpen] = React.useState(false);
 
-  const [role_id, setRol] = React.useState(1);
-
+  const [role_id, setRol] = React.useState("");
+  const [roles, setRoles] = React.useState([]);
 
   function handleClickOpen() {
-    setOpen(true);
+
+    axios.get(BACKEND + `/api/catalog/role`)
+      .then(response => {
+        console.log("buscar listado de roles");
+        setRoles(response.data.data)
+        setOpen(true);
+
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+
   }
 
   function handleClose() {
@@ -135,8 +147,7 @@ export default function FormDialog({ refreshTableUser }) {
             }}
           >
             <option aria-label="None" value="" />
-            <option value={1}>Supervisor</option>
-            <option value={2}>Empleado</option>
+            {roles.map( r => <option value={r.role_id}>{r.role_desc}</option>)}
 
           </Select>
 

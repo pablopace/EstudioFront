@@ -28,9 +28,12 @@ export default function FormDialog(props) {
   const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [rol, setRol] = React.useState("");
   const [rolDesc, setRolDesc] = React.useState("");
   const [user_id, setUserId] = React.useState("");
+
+  const [role_id, setRol] = React.useState("");
+  const [roles, setRoles] = React.useState([]);
+
 
   function handleClickOpen() {
     console.log(props.tablaMeta)
@@ -44,6 +47,16 @@ export default function FormDialog(props) {
         setEmail(response.data.data[0].email)
         setRol(response.data.data[0].role_id)
         setRolDesc(response.data.data[0].role_desc)
+
+
+        axios.get(BACKEND + `/api/catalog/role`)
+          .then(response => {
+            console.log("buscar listado de roles");
+            setRoles(response.data.data)
+          })
+          .catch(error => {
+            console.log(error);
+          })
 
         setOpen(true);
 
@@ -64,7 +77,7 @@ export default function FormDialog(props) {
       "first_name": nombre,
       "last_name": apellido,
       "email": email,
-      "role_id": rol
+      "role_id": role_id
     })
       .then(response => {
         console.log("OK");
@@ -173,7 +186,7 @@ export default function FormDialog(props) {
           <Select style={{ minWidth: 535.2, }}
             margin="dense"
             native
-            value={rol}
+            value={role_id}
             onChange={e => setRol(e.target.value)}
             inputProps={{
               name: 'rol-native-simple',
@@ -181,8 +194,7 @@ export default function FormDialog(props) {
             }}
           >
             <option aria-label="None" value="" />
-            <option value={1}>Supervisor</option>
-            <option value={2}>Empleado</option>
+            {roles.map(r => <option value={r.role_id}>{r.role_desc}</option>)}
 
           </Select>
 
