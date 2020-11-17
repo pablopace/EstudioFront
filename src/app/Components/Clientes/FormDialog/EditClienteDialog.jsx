@@ -69,6 +69,7 @@ export default function FormDialog(props) {
 
   function handleClickOpen() {
     console.log(props.tablaMeta)
+    setCuit(props.tablaMeta.rowData[0])
 
     axios.get(BACKEND + `/api/client?user=${user_id}&cuit=${cuit}`)
       .then(response => {

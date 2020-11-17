@@ -37,6 +37,7 @@ export default function FormDialog(props) {
 
   function handleClickOpen() {
     console.log(props.tablaMeta)
+    setUser(props.tablaMeta.rowData[0])
 
     axios.get(BACKEND + `/api/user?user=` + user)
       .then(response => {
