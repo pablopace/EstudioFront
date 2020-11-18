@@ -60,6 +60,7 @@ export default function FormDialog(props) {
   ///Impuestos
 
   function handleClickOpen() {
+    setCuit(props.tablaMeta.rowData[0])
     traerImpuestos()
   }
 
